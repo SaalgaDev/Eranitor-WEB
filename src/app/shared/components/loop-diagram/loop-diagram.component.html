@@ -1,0 +1,53 @@
+<svg
+  class="loop"
+  [attr.viewBox]="'0 0 ' + size + ' ' + size"
+  role="img"
+  aria-labelledby="loopTitle"
+>
+  <title id="loopTitle">
+    O ciclo Eranitor: {{ stages.join(' → ') }}, repetido continuamente
+  </title>
+
+  <circle
+    class="loop__track"
+    [attr.cx]="size / 2"
+    [attr.cy]="size / 2"
+    [attr.r]="radius"
+  />
+
+  <!-- ponto que percorre o ciclo, reforçando a ideia de melhoria contínua -->
+  <circle class="loop__runner" r="5">
+    <animateMotion
+      dur="12s"
+      repeatCount="indefinite"
+      [attr.path]="pathD + ' Z'"
+    />
+  </circle>
+
+  @for (node of nodes; track trackByLabel($index, node)) {
+    <g class="loop__node-group">
+      <circle
+        class="loop__node"
+        [attr.cx]="node.x"
+        [attr.cy]="node.y"
+        r="8"
+      />
+      <text
+        class="loop__label"
+        [attr.x]="node.x"
+        [attr.y]="node.y"
+        [attr.dy]="node.y < size / 2 - 20 ? -20 : (node.y > size / 2 + 20 ? 32 : (node.x < size/2 ? 6 : 6))"
+        [attr.text-anchor]="node.x < size / 2 - 10 ? 'end' : (node.x > size / 2 + 10 ? 'start' : 'middle')"
+      >
+        {{ node.label }}
+      </text>
+    </g>
+  }
+
+  <text class="loop__center-title" [attr.x]="size / 2" [attr.y]="size / 2 - 8" text-anchor="middle">
+    Melhoria
+  </text>
+  <text class="loop__center-sub" [attr.x]="size / 2" [attr.y]="size / 2 + 16" text-anchor="middle">
+    contínua
+  </text>
+</svg>

@@ -1,0 +1,108 @@
+<!-- HERO -->
+<section class="hero section--navy">
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <h1 class="hero__title">
+        Estudar nunca foi<br />
+        <span class="hero__title-accent">tão organizado.</span>
+      </h1>
+      <p class="hero__lead">
+        O Eranitor é o assistente que transforma sua rotina de estudos
+        em um ciclo simples: planejar, estudar, registrar e evoluir —
+        tudo em um só lugar.
+      </p>
+      <div class="hero__actions">
+        <a routerLink="/baixar" class="cta cta--primary cta--lg">Baixar grátis</a>
+        <a href="#recursos" class="cta cta--secondary cta--lg">Saiba mais</a>
+      </div>
+
+      <div class="hero__social-proof">
+        <div class="hero__avatars" aria-hidden="true">
+          <span class="hero__avatar">🎓</span>
+          <span class="hero__avatar">📚</span>
+          <span class="hero__avatar">✏️</span>
+        </div>
+        <div>
+          <div class="hero__stars" aria-hidden="true">★★★★★</div>
+          <p class="hero__social-text">Pensado para estudantes e vestibulandos</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__visual">
+      <app-phone-mockup />
+    </div>
+  </div>
+</section>
+
+<!-- CONHEÇA -->
+<section class="section conheca">
+  <div class="container conheca__inner">
+    <span class="eyebrow eyebrow--on-light">Sobre o app</span>
+    <h2 class="conheca__title">
+      Conheça sua próxima plataforma de estudos favorita
+    </h2>
+    <p class="section-head__lead conheca__lead">
+      Ainda não conhece o Eranitor? Ele reúne matérias, tarefas, agenda
+      e tempo de estudo em um único lugar, com prioridades calculadas
+      pra você saber sempre por onde começar.
+    </p>
+    <a routerLink="/sobre-nos" class="cta cta--primary cta--md">Conhecer</a>
+  </div>
+</section>
+
+<!-- RECURSOS -->
+<section class="section section--alt" id="recursos">
+  <div class="container">
+    <div class="section-head section-head--center">
+      <span class="eyebrow eyebrow--on-light">Recursos principais</span>
+      <h2 class="section-head__title">Tudo que você precisa pra mandar bem nos estudos</h2>
+    </div>
+
+    <div class="features-grid">
+      @for (feature of features; track feature.title) {
+        <app-feature-card [title]="feature.title" [description]="feature.description">
+          <ng-container icon>
+            @switch (feature.icon) {
+              @case ('book') {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" />
+                </svg>
+              }
+              @case ('flag') {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1Z" />
+                  <path d="M4 22V3" />
+                </svg>
+              }
+              @case ('calendar') {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <path d="M16 2v4M8 2v4M3 10h18" />
+                </svg>
+              }
+              @case ('clock') {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 7v5l3 3" />
+                </svg>
+              }
+            }
+          </ng-container>
+        </app-feature-card>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="section section--navy final-cta">
+  <div class="container final-cta__inner">
+    <h2 class="section-head__title">Baixe grátis</h2>
+    <p class="section-head__lead">
+      Já disponível em breve. Comece o seu primeiro ciclo de estudos.
+    </p>
+    <a routerLink="/baixar" class="cta cta--primary cta--lg final-cta__btn">Download gratuito</a>
+  </div>
+</section>

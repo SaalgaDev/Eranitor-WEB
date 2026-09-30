@@ -1,0 +1,77 @@
+// Estilo "sticker": pill sólido, contorno grosso, sombra dura
+// deslocada (sem blur) — assinatura visual do mockup de referência.
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-weight: 700;
+  border-radius: var(--radius-pill);
+  border: var(--stroke-md);
+  white-space: nowrap;
+  transition: transform var(--dur-fast) var(--ease-standard),
+    box-shadow var(--dur-fast) var(--ease-standard);
+}
+
+.cta--md {
+  padding: 0.7rem 1.5rem;
+  font-size: var(--fs-400);
+}
+
+.cta--lg {
+  padding: 0.95rem 2rem;
+  font-size: var(--fs-500);
+}
+
+.cta--primary {
+  background: var(--ice-400);
+  color: var(--navy-950);
+  box-shadow: var(--shadow-hard-sm);
+
+  &:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--navy-950);
+  }
+
+  &:active {
+    transform: translate(0, 0);
+    box-shadow: 2px 2px 0 var(--navy-950);
+  }
+}
+
+.cta--secondary {
+  background: var(--grey-200);
+  color: var(--navy-950);
+  border-color: var(--navy-950);
+  box-shadow: var(--shadow-hard-sm);
+
+  &:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--navy-950);
+  }
+
+  &:active {
+    transform: translate(0, 0);
+    box-shadow: 2px 2px 0 var(--navy-950);
+  }
+}
+
+.cta--ghost {
+  background: transparent;
+  border-color: currentColor;
+  color: inherit;
+  box-shadow: none;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta:hover,
+  .cta:active {
+    transform: none;
+  }
+}

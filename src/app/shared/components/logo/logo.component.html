@@ -1,0 +1,28 @@
+<!--
+  Wordmark reconstruído em SVG a partir do arquivo de logo enviado
+  (geometria replicada em traço: capelo de formatura sobre o "I").
+  Se o arquivo .svg/.png oficial for enviado depois, substituir o
+  conteúdo do <svg> por <img [src]="..." alt="Eranitor">, mantendo
+  a mesma altura via CSS.
+-->
+<a routerLink="/" class="logo" [class.logo--dark]="variant === 'dark'" aria-label="Eranitor — página inicial">
+  @if (showWordmark) {
+    <svg class="logo__svg" viewBox="0 0 420 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+      <g transform="translate(238,0)">
+        <polygon points="46,0 92,17 46,34 0,17" />
+        <rect x="43" y="17" width="6" height="20" />
+        <circle cx="46" cy="40" r="5" />
+      </g>
+      <text x="0" y="112" class="logo__wordmark">ERANITOR</text>
+    </svg>
+  } @else {
+    <svg class="logo__svg logo__svg--mark" viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+      <g transform="translate(18,0)">
+        <polygon points="46,0 92,17 46,34 0,17" />
+        <rect x="43" y="17" width="6" height="20" />
+        <circle cx="46" cy="40" r="5" />
+      </g>
+      <text x="0" y="112" class="logo__wordmark">E</text>
+    </svg>
+  }
+</a>

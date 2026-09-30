@@ -1,0 +1,116 @@
+.download-hero {
+  padding-block: var(--space-9);
+}
+
+.download-hero__grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--space-8);
+  align-items: center;
+}
+
+.download-hero__title {
+  font-size: var(--fs-900);
+  color: var(--white);
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.download-hero__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-top: var(--space-7);
+}
+
+.download-hero__qr {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-7);
+  max-width: 420px;
+}
+
+.download-hero__qr-box {
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-md);
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-300);
+  color: var(--on-navy-600);
+  text-align: center;
+}
+
+.download-hero__qr p {
+  font-size: var(--fs-300);
+  color: var(--on-navy-600);
+  line-height: var(--lh-normal);
+}
+
+.download-hero__visual {
+  display: flex;
+  justify-content: center;
+}
+
+// ---- Passo a passo ----
+.steps {
+  display: grid;
+  gap: var(--space-5);
+  max-width: 720px;
+  margin-inline: auto;
+}
+
+.steps__item {
+  display: flex;
+  gap: var(--space-5);
+  align-items: flex-start;
+
+  h3 {
+    font-size: var(--fs-600);
+    margin-bottom: var(--space-2);
+  }
+
+  p {
+    color: var(--ink-600);
+    line-height: var(--lh-normal);
+  }
+}
+
+.steps__index {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--ice-400);
+  color: var(--white);
+  font-family: var(--font-display);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// ---- Compatibilidade ----
+.compat__inner {
+  max-width: 640px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.compat .section-head {
+  margin-bottom: 0;
+}
+
+@media (max-width: 900px) {
+  .download-hero__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .download-hero__visual {
+    order: -1;
+  }
+}

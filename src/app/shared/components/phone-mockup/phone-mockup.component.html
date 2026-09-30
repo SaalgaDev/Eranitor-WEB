@@ -1,0 +1,48 @@
+<!--
+  PLACEHOLDER — quando houver screenshot oficial do app, trocar
+  o conteúdo de .phone__screen por <img src="..." alt="..."> real.
+-->
+<div class="phone" aria-hidden="true">
+  <div class="phone__notch"></div>
+  <div class="phone__screen">
+    <header class="phone__header">
+      <div>
+        <p class="phone__greeting">Olá, Estudante 👋</p>
+        <p class="phone__date">Semana 6 · Meta em dia</p>
+      </div>
+      <div class="phone__streak">🔥 5</div>
+    </header>
+
+    <div class="phone__ring-card">
+      <svg viewBox="0 0 80 80" class="phone__ring">
+        <circle cx="40" cy="40" r="34" class="phone__ring-track" />
+        <circle cx="40" cy="40" r="34" class="phone__ring-value" />
+      </svg>
+      <div class="phone__ring-label">
+        <strong>68%</strong>
+        <span>da meta semanal</span>
+      </div>
+    </div>
+
+    <ul class="phone__subjects">
+      @for (s of subjects; track s.name) {
+        <li class="phone__subject">
+          <div class="phone__subject-top">
+            <span>{{ s.name }}</span>
+            <span>{{ s.progress }}%</span>
+          </div>
+          <div class="phone__bar">
+            <div class="phone__bar-fill" [style.width.%]="s.progress"></div>
+          </div>
+        </li>
+      }
+    </ul>
+
+    <div class="phone__nav">
+      <span class="phone__nav-dot phone__nav-dot--active"></span>
+      <span class="phone__nav-dot"></span>
+      <span class="phone__nav-dot"></span>
+      <span class="phone__nav-dot"></span>
+    </div>
+  </div>
+</div>

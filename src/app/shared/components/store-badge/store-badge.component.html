@@ -1,0 +1,28 @@
+@if (available && url) {
+  <a [href]="url" class="badge" target="_blank" rel="noopener noreferrer">
+    <ng-container [ngTemplateOutlet]="content"></ng-container>
+  </a>
+} @else {
+  <div class="badge badge--disabled" role="note" [attr.aria-label]="label + ': em breve'">
+    <ng-container [ngTemplateOutlet]="content"></ng-container>
+  </div>
+}
+
+<ng-template #content>
+  @if (platform === 'google-play') {
+    <svg class="badge__icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 3.6v16.8a1 1 0 0 0 1.6.8l11-8.4a1 1 0 0 0 0-1.6l-11-8.4A1 1 0 0 0 4 3.6Z" fill="currentColor" />
+    </svg>
+  } @else {
+    <svg class="badge__icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M16.7 12.4c0-2 1.6-3 1.7-3.1-1-1.4-2.5-1.6-3-1.6-1.3-.1-2.5.8-3.1.8-.6 0-1.6-.7-2.7-.7-1.4 0-2.7.8-3.4 2-1.4 2.5-.4 6.3 1 8.3.7 1 1.5 2.1 2.6 2 1-.1 1.4-.7 2.7-.7 1.2 0 1.6.7 2.7.7 1.1 0 1.8-1 2.5-2 .8-1.1 1.1-2.2 1.1-2.3-.1 0-2.1-.8-2.1-3.4ZM14.5 6.1c.6-.7 1-1.7.9-2.7-.9 0-1.9.6-2.5 1.3-.5.6-1 1.6-.9 2.6 1 .1 1.9-.5 2.5-1.2Z"
+        fill="currentColor"
+      />
+    </svg>
+  }
+  <span class="badge__text">
+    <span class="badge__sub">{{ sublabel }}</span>
+    <span class="badge__label">{{ label }}</span>
+  </span>
+</ng-template>

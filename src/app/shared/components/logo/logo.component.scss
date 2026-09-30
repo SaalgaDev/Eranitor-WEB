@@ -1,0 +1,26 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+}
+
+.logo__svg {
+  height: 28px;
+  width: auto;
+  fill: var(--on-navy-100);
+}
+
+:host-context(.logo--dark) .logo__svg,
+.logo--dark .logo__svg {
+  fill: var(--navy-950);
+}
+
+.logo__svg--mark {
+  height: 34px;
+}
+
+.logo__wordmark {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 96px;
+  letter-spacing: -1px;
+}
