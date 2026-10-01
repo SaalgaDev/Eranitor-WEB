@@ -1,6 +1,7 @@
-<a class="skip-link" href="#main-content">Pular para o conteúdo</a>
+<a class="skip-link" href="#main-content">{{ 'skip' | translate }}</a>
 <app-header />
 <main id="main-content">
   <router-outlet />
 </main>
 <app-footer />
+<div class="sr-only" role="status" aria-live="polite">{{ i18n.announcement() }}</div>

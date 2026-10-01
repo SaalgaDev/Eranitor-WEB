@@ -1,50 +1,35 @@
-<section class="section section--navy sobre-hero">
-  <div class="container sobre-hero__inner">
-    <span class="eyebrow">Sobre nós</span>
-    <h1 class="sobre-hero__title">Quem está por trás do Eranitor</h1>
-    <p class="section-head__lead">
-      O Eranitor nasceu como um projeto acadêmico com um objetivo simples:
-      ajudar estudantes a organizar sua rotina sem depender de planilhas,
-      cadernos soltos ou vários aplicativos diferentes.
-    </p>
-  </div>
-</section>
+<app-page-hero
+  eyebrowKey="page.about.eyebrow"
+  titleKey="page.about.title"
+  leadKey="page.about.lead"
+/>
 
 <section class="section">
   <div class="container missao__grid">
     <div class="section-head">
-      <span class="eyebrow eyebrow--on-light">Nossa missão</span>
-      <h2 class="section-head__title">Organizar para estudar melhor</h2>
+      <span class="eyebrow eyebrow--on-light" appReveal>{{ 'page.about.missionEyebrow' | translate }}</span>
+      <h2 class="section-head__title" appReveal [revealDelay]="80">{{ 'page.about.missionTitle' | translate }}</h2>
     </div>
-    <div class="missao__text">
-      <p>
-        Acreditamos que boa parte da dificuldade nos estudos não é falta
-        de esforço — é falta de organização. Por isso, construímos o
-        Eranitor como um assistente: ele não estuda por você, mas te
-        ajuda a planejar o quê, quando e por quanto tempo estudar.
-      </p>
-      <p>
-        Não prometemos aprovação garantida nem resultados automáticos.
-        O que oferecemos é clareza: um lugar só para organizar matérias,
-        acompanhar tarefas e enxergar sua evolução de verdade.
-      </p>
+    <div class="missao__text" appReveal [revealDelay]="140">
+      <p>{{ 'page.about.missionP1' | translate }}</p>
+      <p>{{ 'page.about.missionP2' | translate }}</p>
     </div>
   </div>
 </section>
 
 <section class="section section--navy">
-  <div class="container">
+  <div class="container container--wide">
     <div class="section-head section-head--center">
-      <span class="eyebrow">Como funciona</span>
-      <h2 class="section-head__title">O ciclo por trás do Eranitor</h2>
+      <span class="eyebrow" appReveal>{{ 'page.about.howEyebrow' | translate }}</span>
+      <h2 class="section-head__title" appReveal [revealDelay]="80">{{ 'page.about.howTitle' | translate }}</h2>
     </div>
     <ol class="cycle-detail">
-      @for (stage of cycle; track stage.name; let i = $index) {
-        <li class="cycle-detail__item">
+      @for (i of stageIndexes; track i) {
+        <li class="cycle-detail__item" appReveal [revealDelay]="(i % 2) * 90">
           <span class="cycle-detail__index">{{ i + 1 }}</span>
           <div>
-            <h3>{{ stage.name }}</h3>
-            <p>{{ stage.text }}</p>
+            <h3>{{ 'page.about.stage.' + i + '.name' | translate }}</h3>
+            <p>{{ 'page.about.stage.' + i + '.text' | translate }}</p>
           </div>
         </li>
       }
@@ -53,16 +38,16 @@
 </section>
 
 <section class="section section--alt">
-  <div class="container">
+  <div class="container container--wide">
     <div class="section-head section-head--center">
-      <span class="eyebrow eyebrow--on-light">O que nos guia</span>
-      <h2 class="section-head__title">Nossos valores</h2>
+      <span class="eyebrow eyebrow--on-light" appReveal>{{ 'page.about.valuesEyebrow' | translate }}</span>
+      <h2 class="section-head__title" appReveal [revealDelay]="80">{{ 'page.about.valuesTitle' | translate }}</h2>
     </div>
     <div class="values-grid">
-      @for (v of values; track v.title) {
-        <div class="value-card">
-          <h3>{{ v.title }}</h3>
-          <p>{{ v.text }}</p>
+      @for (i of valueIndexes; track i) {
+        <div class="value-card" appReveal [revealDelay]="i * 90">
+          <h3>{{ 'page.about.value.' + i + '.title' | translate }}</h3>
+          <p>{{ 'page.about.value.' + i + '.text' | translate }}</p>
         </div>
       }
     </div>
@@ -70,9 +55,9 @@
 </section>
 
 <section class="section section--navy final-cta">
-  <div class="container final-cta__inner">
-    <h2 class="section-head__title">Quer conhecer na prática?</h2>
-    <p class="section-head__lead">Baixe o Eranitor e comece seu primeiro ciclo de estudos.</p>
-    <a routerLink="/baixar" class="cta cta--primary cta--lg final-cta__btn">Baixar o app</a>
+  <div class="container container--narrow final-cta__inner">
+    <h2 class="section-head__title" appReveal>{{ 'page.about.ctaTitle' | translate }}</h2>
+    <p class="section-head__lead" appReveal [revealDelay]="90">{{ 'page.about.ctaText' | translate }}</p>
+    <a routerLink="/baixar" class="cta cta--primary cta--lg final-cta__btn" appReveal [revealDelay]="160">{{ 'page.about.ctaBtn' | translate }}</a>
   </div>
 </section>

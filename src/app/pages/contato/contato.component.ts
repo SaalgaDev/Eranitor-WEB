@@ -1,31 +1,36 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { PageHeroComponent } from '../../shared/components/page-hero/page-hero.component';
+import { RevealDirective } from '../../shared/directives/reveal.directive';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
-/**
- * Página de Contato — 100% estática, sem formulário nem backend
- * (a instrução mestre do projeto veda backend/login no site
- * institucional). Os canais abaixo são placeholders até os
- * dados oficiais serem definidos.
- */
+interface Channel {
+  icon: 'mail' | 'instagram';
+  titleKey: string;
+  value?: string;
+  valueKey?: string;
+  href: string;
+}
+
 @Component({
   selector: 'app-contato',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PageHeroComponent, RevealDirective, TranslatePipe],
   templateUrl: './contato.component.html',
   styleUrl: './contato.component.scss',
 })
 export class ContatoComponent {
-  readonly channels = [
+  readonly channels: Channel[] = [
     {
-      icon: 'mail' as const,
-      title: 'E-mail',
+      icon: 'mail',
+      titleKey: 'page.contact.email',
       value: 'contato@eranitor.com.br',
       href: 'mailto:contato@eranitor.com.br',
     },
     {
-      icon: 'instagram' as const,
-      title: 'Instagram',
-      value: '@eranitor',
+      icon: 'instagram',
+      titleKey: 'page.contact.instagram',
+      valueKey: 'page.contact.instagramValue',
       href: '#',
     },
   ];

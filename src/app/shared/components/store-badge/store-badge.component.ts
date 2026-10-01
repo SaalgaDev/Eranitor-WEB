@@ -1,23 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule, NgTemplateOutlet } from '@angular/common';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 export type StorePlatform = 'google-play' | 'app-store';
 
-/**
- * Selo de loja de aplicativos.
- *
- * IMPORTANTE: o Eranitor ainda não está publicado oficialmente
- * nas lojas. Por instrução do projeto, nunca inventamos um link
- * de download — enquanto `available` for false, o selo é
- * apresentado como "em breve" e não é clicável.
- *
- * Quando o app for publicado, atualizar `url` e passar
- * `available: true` a partir da página que usa este componente.
- */
 @Component({
   selector: 'app-store-badge',
   standalone: true,
-  imports: [CommonModule, NgTemplateOutlet],
+  imports: [CommonModule, NgTemplateOutlet, TranslatePipe],
   templateUrl: './store-badge.component.html',
   styleUrl: './store-badge.component.scss',
 })
@@ -28,9 +18,5 @@ export class StoreBadgeComponent {
 
   get label(): string {
     return this.platform === 'google-play' ? 'Google Play' : 'App Store';
-  }
-
-  get sublabel(): string {
-    return this.available ? 'Disponível em' : 'Em breve em';
   }
 }

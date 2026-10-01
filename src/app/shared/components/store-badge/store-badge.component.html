@@ -3,7 +3,7 @@
     <ng-container [ngTemplateOutlet]="content"></ng-container>
   </a>
 } @else {
-  <div class="badge badge--disabled" role="note" [attr.aria-label]="label + ': em breve'">
+  <div class="badge badge--disabled" role="note" [attr.aria-label]="label + ': ' + ('common.soon' | translate)">
     <ng-container [ngTemplateOutlet]="content"></ng-container>
   </div>
 }
@@ -22,7 +22,7 @@
     </svg>
   }
   <span class="badge__text">
-    <span class="badge__sub">{{ sublabel }}</span>
+    <span class="badge__sub">{{ (available ? 'store.available' : 'store.soon') | translate }}</span>
     <span class="badge__label">{{ label }}</span>
   </span>
 </ng-template>

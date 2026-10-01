@@ -1,48 +1,109 @@
-<!--
-  PLACEHOLDER — quando houver screenshot oficial do app, trocar
-  o conteúdo de .phone__screen por <img src="..." alt="..."> real.
--->
-<div class="phone" aria-hidden="true">
-  <div class="phone__notch"></div>
-  <div class="phone__screen">
-    <header class="phone__header">
-      <div>
-        <p class="phone__greeting">Olá, Estudante 👋</p>
-        <p class="phone__date">Semana 6 · Meta em dia</p>
+<div
+  class="phone"
+  [class.phone--float]="variant === 'float'"
+  role="img"
+  [attr.aria-label]="('phone.label' | translate) + ' ' + ('phone.screen.' + screen | translate) + '. ' + ('phone.example' | translate)"
+>
+  <div class="phone__glow" aria-hidden="true"></div>
+  <div class="phone__side phone__side--action" aria-hidden="true"></div>
+  <div class="phone__side phone__side--vol-up" aria-hidden="true"></div>
+  <div class="phone__side phone__side--vol-down" aria-hidden="true"></div>
+  <div class="phone__side phone__side--power" aria-hidden="true"></div>
+  <div class="phone__frame" aria-hidden="false">
+    <div class="phone__bezel">
+      <div class="phone__screen">
+        <div class="phone__island" aria-hidden="true">
+          <span class="phone__lens"></span>
+          <span class="phone__sensor"></span>
+        </div>
+        <div class="phone__status" aria-hidden="true">
+          <span class="phone__time">9:41</span>
+          <span class="phone__status-icons">
+            <svg viewBox="0 0 20 14" class="phone__sig"><path d="M1 13V9M6 13V6M11 13V3M16 13V1" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" /></svg>
+            <svg viewBox="0 0 20 14" class="phone__wifi"><path d="M2 5a11 11 0 0 1 16 0M5.5 8.5a6.5 6.5 0 0 1 9 0M9 12h2" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none" /><circle cx="10" cy="12.4" r="1.2" fill="currentColor" /></svg>
+            <svg viewBox="0 0 28 14" class="phone__batt"><rect x="1" y="1.5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.7" /><rect x="3" y="3.5" width="13" height="7" rx="1.6" fill="currentColor" /><rect x="24.5" y="4.5" width="2.4" height="5" rx="1.2" fill="currentColor" opacity="0.7" /></svg>
+          </span>
+        </div>
+        <div class="phone__panes">
+          @for (key of order; track key) {
+            <div class="phone__pane" [class.phone__pane--active]="key === screen" [attr.aria-hidden]="key !== screen">
+              <div class="phone__apphead">
+                <div>
+                  <p class="phone__greeting">{{ 'phone.greeting' | translate }}</p>
+                  <p class="phone__sub">{{ ('phone.screen.' + key) | translate }} · {{ 'phone.example' | translate }}</p>
+                </div>
+                <span class="phone__avatar">{{ ('phone.greeting' | translate).slice(0, 1) }}</span>
+              </div>
+              <div class="phone__goal">
+                <svg viewBox="0 0 80 80" class="phone__ring" aria-hidden="true">
+                  <circle cx="40" cy="40" r="34" class="phone__ring-track" />
+                  <circle cx="40" cy="40" r="34" class="phone__ring-value" [style.stroke-dashoffset]="213.6 - (213.6 * ringByScreen[key] / 100)" />
+                </svg>
+                <div class="phone__goal-text">
+                  <strong>{{ ringByScreen[key] }}%</strong>
+                  <span>{{ ('phone.ring.' + key) | translate }}</span>
+                </div>
+              </div>
+              <p class="phone__section">{{ 'phone.subjects' | translate }}</p>
+              <ul class="phone__subjects" aria-hidden="true">
+                @for (sk of subjectKeys; track sk; let j = $index) {
+                  <li class="phone__subject">
+                    <div class="phone__subject-top">
+                      <span>{{ sk | translate }}</span>
+                      <span>{{ subjectProgress[j] }}%</span>
+                    </div>
+                    <div class="phone__bar">
+                      <div class="phone__bar-fill" [style.width.%]="subjectProgress[j]"></div>
+                    </div>
+                  </li>
+                }
+              </ul>
+              <p class="phone__section">{{ 'phone.tasks' | translate }}</p>
+              <ul class="phone__tasks" aria-hidden="true">
+                @for (tk of taskKeys[key]; track tk; let j = $index) {
+                  <li class="phone__task" [class.phone__task--alt]="j === 1">
+                    <span class="phone__check">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5" /></svg>
+                    </span>
+                    <span>{{ tk | translate }}</span>
+                  </li>
+                }
+              </ul>
+              <div class="phone__next" aria-hidden="true">
+                <span class="phone__next-dot"></span>
+                <div>
+                  <p class="phone__next-kicker">{{ ('phone.next.' + key + '.kicker') | translate }}</p>
+                  <p class="phone__next-value">{{ ('phone.next.' + key + '.value') | translate }}</p>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+        <nav class="phone__tabbar" aria-hidden="true">
+          <span class="phone__tab" [class.phone__tab--active]="tabByScreen[screen] === 0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 3l9 8" /><path d="M5 10v10h14V10" /></svg>
+            <span>{{ 'phone.tab.home' | translate }}</span>
+          </span>
+          <span class="phone__tab" [class.phone__tab--active]="tabByScreen[screen] === 1">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" /></svg>
+            <span>{{ 'phone.tab.subjects' | translate }}</span>
+          </span>
+          <span class="phone__tab" [class.phone__tab--active]="tabByScreen[screen] === 2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg>
+            <span>{{ 'phone.tab.schedule' | translate }}</span>
+          </span>
+          <span class="phone__tab" [class.phone__tab--active]="tabByScreen[screen] === 3">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 3" /></svg>
+            <span>{{ 'phone.tab.time' | translate }}</span>
+          </span>
+          <span class="phone__tab" [class.phone__tab--active]="tabByScreen[screen] === 4">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4" /><path d="M4 21c1.5-4 5-5.5 8-5.5s6.5 1.5 8 5.5" /></svg>
+            <span>{{ 'phone.tab.profile' | translate }}</span>
+          </span>
+        </nav>
+        <div class="phone__homebar" aria-hidden="true"></div>
+        <div class="phone__glass" aria-hidden="true"></div>
       </div>
-      <div class="phone__streak">🔥 5</div>
-    </header>
-
-    <div class="phone__ring-card">
-      <svg viewBox="0 0 80 80" class="phone__ring">
-        <circle cx="40" cy="40" r="34" class="phone__ring-track" />
-        <circle cx="40" cy="40" r="34" class="phone__ring-value" />
-      </svg>
-      <div class="phone__ring-label">
-        <strong>68%</strong>
-        <span>da meta semanal</span>
-      </div>
-    </div>
-
-    <ul class="phone__subjects">
-      @for (s of subjects; track s.name) {
-        <li class="phone__subject">
-          <div class="phone__subject-top">
-            <span>{{ s.name }}</span>
-            <span>{{ s.progress }}%</span>
-          </div>
-          <div class="phone__bar">
-            <div class="phone__bar-fill" [style.width.%]="s.progress"></div>
-          </div>
-        </li>
-      }
-    </ul>
-
-    <div class="phone__nav">
-      <span class="phone__nav-dot phone__nav-dot--active"></span>
-      <span class="phone__nav-dot"></span>
-      <span class="phone__nav-dot"></span>
-      <span class="phone__nav-dot"></span>
     </div>
   </div>
 </div>

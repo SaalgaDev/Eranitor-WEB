@@ -1,0 +1,261 @@
+.settings {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.settings__gear {
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  color: var(--text);
+  border: var(--stroke-md);
+  border-color: var(--hard-color);
+  box-shadow: 3px 3px 0 var(--hard-color);
+  transition: transform var(--dur-base) var(--ease-spring), box-shadow var(--dur-fast) var(--ease-standard), background-color var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard);
+}
+
+.settings__gear svg {
+  width: 1.3rem;
+  height: 1.3rem;
+  transition: transform var(--dur-slow) var(--ease-spring);
+}
+
+.settings__gear:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--hard-color);
+}
+
+.settings__gear--open {
+  background: var(--ice-400);
+  color: var(--navy-950);
+}
+
+.settings__gear--open svg {
+  transform: rotate(135deg);
+}
+
+.settings__panel {
+  position: absolute;
+  top: calc(100% + 0.85rem);
+  right: 0;
+  width: min(19rem, calc(100vw - 2rem));
+  background: var(--settings-bg);
+  color: var(--settings-ink);
+  border: var(--stroke-md);
+  border-color: var(--hard-color);
+  border-radius: var(--radius-lg);
+  box-shadow: 5px 5px 0 var(--hard-color);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  z-index: var(--z-settings);
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px) scale(0.98);
+  transform-origin: top right;
+  transition: grid-template-rows var(--dur-base) var(--ease-standard), opacity var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-standard), visibility 0s linear var(--dur-base);
+  pointer-events: none;
+}
+
+.settings__panel::before {
+  content: '';
+  position: absolute;
+  top: -0.55rem;
+  right: 1.4rem;
+  width: 1rem;
+  height: 1rem;
+  background: inherit;
+  border-left: var(--stroke-md);
+  border-left-color: var(--hard-color);
+  border-top: var(--stroke-md);
+  border-top-color: var(--hard-color);
+  transform: rotate(45deg);
+}
+
+.settings__panel--open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  pointer-events: auto;
+  transition: grid-template-rows var(--dur-base) var(--ease-standard), opacity var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-standard), visibility 0s;
+}
+
+.settings__inner {
+  overflow: hidden;
+  min-height: 0;
+  padding: var(--space-5);
+}
+
+.settings__title {
+  font-size: var(--fs-500);
+  letter-spacing: -0.01em;
+  margin-bottom: var(--space-4);
+  overflow: hidden;
+}
+
+.settings__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-block: var(--space-3);
+  border-top: 1px solid var(--border-soft);
+  overflow: hidden;
+  min-height: 0;
+}
+
+.settings__row--col {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.settings__label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-300);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.settings__state {
+  margin-left: auto;
+  font-size: var(--fs-300);
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.settings__switch {
+  position: relative;
+  width: 4.5rem;
+  height: 2.5rem;
+  min-height: 44px;
+  border-radius: var(--radius-pill);
+  background: var(--navy-800);
+  border: var(--stroke-md);
+  border-color: var(--hard-color);
+  box-shadow: 3px 3px 0 var(--hard-color);
+  display: flex;
+  align-items: center;
+  padding: 0.25rem;
+  transition: background-color var(--dur-fast) var(--ease-standard);
+}
+
+.settings__switch-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  color: var(--ice-400);
+  margin-left: 0.3rem;
+}
+
+.settings__knob {
+  position: absolute;
+  top: 50%;
+  left: 0.3rem;
+  translate: 0 -50%;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  background: var(--ice-400);
+  color: var(--navy-950);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--navy-950);
+  transition: left var(--dur-base) var(--ease-spring), background-color var(--dur-fast) var(--ease-standard);
+}
+
+.settings__knob svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.settings__switch--light {
+  background: var(--ice-200);
+}
+
+.settings__switch--light .settings__knob {
+  left: calc(100% - 2.2rem);
+  background: var(--navy-950);
+  color: var(--ice-400);
+  border-color: var(--navy-950);
+}
+
+.settings__langs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.settings__lang {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 44px;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: inherit;
+  border: 2px solid var(--border-soft);
+  transition: border-color var(--dur-fast) var(--ease-standard), background-color var(--dur-fast) var(--ease-standard);
+  text-align: left;
+  width: 100%;
+}
+
+.settings__lang:hover {
+  border-color: var(--ice-400);
+}
+
+.settings__lang--active {
+  border-color: var(--ice-400);
+  background: color-mix(in srgb, var(--ice-400) 14%, transparent);
+}
+
+.settings__code {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-200);
+  background: var(--navy-950);
+  color: var(--ice-400);
+  border-radius: var(--radius-sm);
+  padding: 0.25rem 0.45rem;
+}
+
+.settings__name {
+  font-weight: 600;
+  font-size: var(--fs-400);
+}
+
+.settings__check {
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-left: auto;
+  color: var(--ice-400);
+  opacity: 0;
+}
+
+.settings__lang--active .settings__check {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settings__gear svg,
+  .settings__panel,
+  .settings__knob {
+    transition: opacity var(--dur-fast) var(--ease-standard);
+    transform: none;
+  }
+  .settings__gear--open svg {
+    transform: none;
+  }
+  .settings__panel {
+    transform: none;
+  }
+}

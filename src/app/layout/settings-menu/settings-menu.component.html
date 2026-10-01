@@ -1,0 +1,77 @@
+<div class="settings">
+  <button
+    #trigger
+    type="button"
+    class="settings__gear"
+    [class.settings__gear--open]="open"
+    (click)="toggle()"
+    [attr.aria-expanded]="open"
+    aria-controls="settings-panel"
+    [attr.aria-label]="('settings.open' | translate) + ' / ' + ('settings.title' | translate)"
+  >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="3.2" />
+      <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 8.89a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34h.11A1.7 1.7 0 0 0 10.11 3V3a2 2 0 1 1 4 0v.09c0 .68.4 1.3 1 1.55.61.26 1.32.11 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v.11c.26.61.88 1 1.55 1H21a2 2 0 1 1 0 4h-.09c-.68 0-1.3.4-1.51 1Z" />
+    </svg>
+  </button>
+  <section
+    #panel
+    id="settings-panel"
+    class="settings__panel"
+    [class.settings__panel--open]="open"
+    [attr.aria-hidden]="!open"
+    [attr.inert]="!open ? true : null"
+  >
+    <h2 class="settings__title">{{ 'settings.title' | translate }}</h2>
+    <div class="settings__inner">
+    <div class="settings__row">
+      <span class="settings__label" id="settings-theme-label">{{ 'settings.theme' | translate }}</span>
+      <button
+        type="button"
+        role="switch"
+        class="settings__switch"
+        [class.settings__switch--light]="theme.theme() === 'light'"
+        [attr.aria-checked]="theme.theme() === 'light'"
+        aria-labelledby="settings-theme-label settings-theme-state"
+        (click)="theme.toggle()"
+      >
+        <svg class="settings__switch-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+        </svg>
+        <span class="settings__knob" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+          </svg>
+        </span>
+        <span class="sr-only" id="settings-theme-state">{{ (theme.theme() === 'light' ? 'settings.light' : 'settings.dark') | translate }}</span>
+      </button>
+      <span class="settings__state">{{ (theme.theme() === 'light' ? 'settings.light' : 'settings.dark') | translate }}</span>
+    </div>
+    <div class="settings__row settings__row--col">
+      <span class="settings__label" id="settings-lang-label">{{ 'settings.language' | translate }}</span>
+      <div class="settings__langs" role="radiogroup" aria-labelledby="settings-lang-label">
+        @for (l of langs; track l.code; let idx = $index) {
+          <button
+            type="button"
+            role="radio"
+            class="settings__lang"
+            [class.settings__lang--active]="i18n.lang() === l.code"
+            [attr.aria-checked]="i18n.lang() === l.code"
+            [attr.lang]="l.htmlLang"
+            [attr.tabindex]="i18n.lang() === l.code ? 0 : -1"
+            (click)="chooseLang(l.code)"
+            (keydown)="onLangKeydown($event, idx)"
+          >
+            <span class="settings__code">{{ l.short }}</span>
+            <span class="settings__name">{{ l.nameKey }}</span>
+            <svg class="settings__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 12.5 9.5 18 20 6.5" />
+            </svg>
+          </button>
+        }
+      </div>
+    </div>
+    </div>
+  </section>
+</div>

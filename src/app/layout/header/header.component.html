@@ -1,23 +1,11 @@
-<header class="header">
-  <div class="container header__row">
+<header class="header" [class.header--scrolled]="scrolled">
+  <div class="container container--wide header__float">
     <app-logo />
-
-    <button
-      type="button"
-      class="header__toggle"
-      (click)="toggleMenu()"
-      [attr.aria-expanded]="menuOpen"
-      aria-controls="primary-nav"
-    >
-      <span class="sr-only">{{ menuOpen ? 'Fechar menu' : 'Abrir menu' }}</span>
-      <span class="header__toggle-bar" [class.is-open]="menuOpen"></span>
-    </button>
-
     <nav
       id="primary-nav"
       class="header__nav"
       [class.header__nav--open]="menuOpen"
-      aria-label="Navegação principal"
+      [attr.aria-label]="'nav.main' | translate"
     >
       <ul class="header__pills">
         @for (link of navLinks; track link.path) {
@@ -25,26 +13,41 @@
             <a
               [routerLink]="link.path"
               routerLinkActive="is-active"
+              [routerLinkActiveOptions]="{ exact: link.path === '/' }"
               (click)="closeMenu()"
               class="header__pill"
             >
-              {{ link.label }}
+              {{ link.labelKey | translate }}
             </a>
           </li>
         }
       </ul>
-
       <a
         routerLink="/baixar"
         routerLinkActive="is-active"
         (click)="closeMenu()"
         class="header__pill header__pill--cta"
       >
-        Download
+        {{ 'nav.download' | translate }}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 4v12M6 12l6 6 6-6M5 21h14" />
         </svg>
       </a>
     </nav>
+    <div class="header__controls">
+      <app-settings-menu />
+      <button
+        #menuToggle
+        type="button"
+        class="header__toggle"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="menuOpen"
+        aria-controls="primary-nav"
+        [attr.aria-label]="(menuOpen ? 'nav.close' : 'nav.open') | translate"
+      >
+        <span class="sr-only">{{ (menuOpen ? 'nav.close' : 'nav.open') | translate }}</span>
+        <span class="header__toggle-bar" [class.is-open]="menuOpen" aria-hidden="true"></span>
+      </button>
+    </div>
   </div>
 </header>

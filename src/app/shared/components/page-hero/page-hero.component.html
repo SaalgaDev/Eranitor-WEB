@@ -1,0 +1,12 @@
+<section class="page-hero section--navy">
+  <div class="tech-grid" aria-hidden="true"></div>
+  <div class="page-hero__aurora" aria-hidden="true"></div>
+  <div class="container container--narrow page-hero__inner">
+    <p class="eyebrow" appReveal>{{ eyebrowKey | translate }}</p>
+    <h1 class="page-hero__title" appReveal [revealDelay]="90">{{ titleKey | translate }}</h1>
+    @if (leadKey) {
+      <p class="page-hero__lead" appReveal [revealDelay]="160">{{ leadKey | translate }}</p>
+    }
+    <ng-content />
+  </div>
+</section>

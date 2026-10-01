@@ -1,70 +1,57 @@
-<section class="section section--navy download-hero">
-  <div class="container download-hero__grid">
-    <div class="download-hero__copy">
-      <span class="eyebrow">Download</span>
-      <h1 class="download-hero__title">Baixe o Eranitor</h1>
-      <p class="section-head__lead">
-        O aplicativo está em fase final de desenvolvimento. Em breve,
-        você poderá baixá-lo diretamente nas lojas oficiais.
-      </p>
-
-      <div class="download-hero__badges">
-        @for (store of stores; track store.platform) {
-          <app-store-badge
-            [platform]="store.platform"
-            [available]="store.available"
-            [url]="store.url"
-          />
-        }
-      </div>
-
-      <div class="download-hero__qr" role="note">
-        <div class="download-hero__qr-box" aria-hidden="true">
-          <span>QR Code</span>
-        </div>
-        <p>
-          O QR Code para instalação direta será disponibilizado aqui
-          assim que o Eranitor for publicado.
-        </p>
-      </div>
-    </div>
-
-    <div class="download-hero__visual">
-      <app-phone-mockup />
-    </div>
+<app-page-hero
+  eyebrowKey="page.download.eyebrow"
+  titleKey="page.download.title"
+  leadKey="page.download.lead"
+>
+  <div class="download-hero__badges">
+    @for (store of stores; track store.platform) {
+      <app-store-badge
+        [platform]="store.platform"
+        [available]="store.available"
+        [url]="store.url"
+      />
+    }
   </div>
-</section>
+</app-page-hero>
 
-<section class="section">
-  <div class="container">
-    <div class="section-head section-head--center">
-      <span class="eyebrow">Como será</span>
-      <h2 class="section-head__title">Passo a passo para começar</h2>
+<section class="section download-main">
+  <div class="container download-main__grid">
+    <div>
+      <div class="section-head">
+        <span class="eyebrow eyebrow--on-light" appReveal>{{ 'page.download.stepsEyebrow' | translate }}</span>
+        <h2 class="section-head__title" appReveal [revealDelay]="80">{{ 'page.download.stepsTitle' | translate }}</h2>
+      </div>
+      <ol class="steps">
+        @for (i of stepIndexes; track i) {
+          <li class="steps__item" appReveal [revealDelay]="i * 80">
+            <span class="steps__index">{{ i + 1 }}</span>
+            <div>
+              <h3>{{ 'page.download.step.' + i + '.title' | translate }}</h3>
+              <p>{{ 'page.download.step.' + i + '.text' | translate }}</p>
+            </div>
+          </li>
+        }
+      </ol>
+      <div class="download-main__qr" role="note" appReveal>
+        <div class="download-main__qr-box" aria-hidden="true">
+          <span>{{ 'page.download.qrTitle' | translate }}</span>
+        </div>
+        <p>{{ 'page.download.qrText' | translate }}</p>
+      </div>
     </div>
-
-    <ol class="steps">
-      @for (step of steps; track step.title; let i = $index) {
-        <li class="steps__item">
-          <span class="steps__index">{{ i + 1 }}</span>
-          <div>
-            <h3>{{ step.title }}</h3>
-            <p>{{ step.text }}</p>
-          </div>
-        </li>
-      }
-    </ol>
+    <div class="download-main__visual" appReveal="scale">
+      <app-phone-mockup variant="float" screen="plan" />
+    </div>
   </div>
 </section>
 
 <section class="section section--alt compat">
-  <div class="container compat__inner">
-    <div class="section-head">
-      <span class="eyebrow">Compatibilidade</span>
-      <h2 class="section-head__title">Feito para smartphones Android e iOS</h2>
-      <p class="section-head__lead">
-        As informações específicas de versão mínima e requisitos de
-        compatibilidade serão publicadas aqui assim que o aplicativo
-        estiver disponível para download.
+  <div class="container container--narrow compat__inner">
+    <div class="section-head section-head--center">
+      <span class="eyebrow eyebrow--on-light" appReveal>{{ 'page.download.compatEyebrow' | translate }}</span>
+      <h2 class="section-head__title" appReveal [revealDelay]="80">{{ 'page.download.compatTitle' | translate }}</h2>
+      <p class="section-head__lead" appReveal [revealDelay]="140">
+        {{ 'page.download.compatText' | translate }}
       </p>
     </div>
   </div>

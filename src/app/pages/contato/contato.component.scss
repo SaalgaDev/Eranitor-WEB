@@ -1,24 +1,7 @@
-.contato-hero {
-  padding-block: var(--space-9) var(--space-8);
-}
-
-.contato-hero__inner {
-  max-width: 640px;
-}
-
-.contato-hero__title {
-  font-size: var(--fs-900);
-  color: var(--white);
-  margin-top: var(--space-4);
-  margin-bottom: var(--space-5);
-}
-
 .channels-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-6);
-  max-width: 720px;
-  margin-inline: auto;
+  gap: var(--gap-fluid);
 }
 
 .channel-card {
@@ -27,34 +10,35 @@
   align-items: center;
   text-align: center;
   gap: var(--space-3);
-  padding: var(--space-7) var(--space-5);
-  background: var(--white);
-  border: var(--stroke-md);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-hard-sm);
-  transition: transform var(--dur-base) var(--ease-standard),
-    box-shadow var(--dur-base) var(--ease-standard);
+  padding: clamp(1.75rem, 1.5rem + 2vw, 2.75rem) var(--space-5);
+  background: var(--card-bg);
+  color: var(--text);
+  border: 2px solid var(--hard-color);
+  border-radius: var(--radius-xl);
+  box-shadow: 3px 3px 0 var(--hard-color);
+  min-height: 44px;
+  transition: transform var(--dur-base) var(--ease-standard), box-shadow var(--dur-base) var(--ease-standard), var(--theme-transition);
+}
 
-  &:hover {
-    transform: translate(-3px, -3px);
-    box-shadow: var(--shadow-hard-md);
-  }
+.channel-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 5px 5px 0 var(--hard-color);
 }
 
 .channel-card__icon {
-  width: 56px;
-  height: 56px;
+  width: 3.5rem;
+  height: 3.5rem;
   border-radius: 50%;
   background: var(--ice-200);
   border: var(--stroke-md);
   display: flex;
   align-items: center;
   justify-content: center;
+}
 
-  svg {
-    width: 26px;
-    height: 26px;
-  }
+.channel-card__icon svg {
+  width: 1.625rem;
+  height: 1.625rem;
 }
 
 .channel-card__title {
@@ -64,15 +48,16 @@
 }
 
 .channel-card__value {
-  color: var(--ink-600);
+  color: var(--text-muted);
   font-size: var(--fs-400);
+  word-break: break-word;
 }
 
 .channels-note {
-  max-width: 560px;
+  max-width: 36rem;
   margin: var(--space-8) auto 0;
   text-align: center;
-  color: var(--ink-600);
+  color: var(--text-muted);
   font-size: var(--fs-300);
 }
 

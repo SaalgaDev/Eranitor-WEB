@@ -1,7 +1,22 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
   <meta charset="utf-8">
+  <script>
+    try {
+      var t = localStorage.getItem('eranitor-theme');
+      var l = localStorage.getItem('eranitor-lang');
+      if (t !== 'dark' && t !== 'light') {
+        t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      }
+      document.documentElement.setAttribute('data-theme', t);
+      if (l === 'en' || l === 'es' || l === 'pt-BR') {
+        document.documentElement.setAttribute('lang', l);
+      }
+    } catch (e) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  </script>
   <title>Eranitor — Organize seus estudos, evolua todos os dias</title>
   <meta name="description" content="Eranitor é o assistente de gerenciamento de estudos que ajuda você a planejar, estudar, registrar e acompanhar seu progresso. Baixe o app e comece a organizar sua rotina de estudos.">
   <meta name="theme-color" content="#0A1530">
@@ -20,7 +35,8 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 </head>
 <body>
   <app-root></app-root>

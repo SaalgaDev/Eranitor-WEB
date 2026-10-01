@@ -1,108 +1,241 @@
-<!-- HERO -->
-<section class="hero section--navy">
-  <div class="container hero__grid">
+<section
+  class="hero section--navy"
+  aria-roledescription="carousel"
+  [attr.aria-label]="'hero.carousel' | translate"
+  (keydown)="onHeroKeydown($event)"
+  (mouseenter)="pause()"
+  (mouseleave)="resume()"
+  (focusin)="pause()"
+  (focusout)="resume()"
+>
+  <div class="hero__bg" aria-hidden="true">
+    <div class="hero__aurora"></div>
+    <div class="tech-grid"></div>
+    <div class="hero__glow hero__glow--a"></div>
+    <div class="hero__glow hero__glow--b"></div>
+  </div>
+
+  <div class="container container--wide hero__grid">
     <div class="hero__copy">
-      <h1 class="hero__title">
-        Estudar nunca foi<br />
-        <span class="hero__title-accent">tão organizado.</span>
-      </h1>
-      <p class="hero__lead">
-        O Eranitor é o assistente que transforma sua rotina de estudos
-        em um ciclo simples: planejar, estudar, registrar e evoluir —
-        tudo em um só lugar.
+      <p class="hero__badge" appReveal>
+        <span class="hero__pulse" aria-hidden="true"></span>
+        {{ 'hero.badge' | translate }}
       </p>
-      <div class="hero__actions">
-        <a routerLink="/baixar" class="cta cta--primary cta--lg">Baixar grátis</a>
-        <a href="#recursos" class="cta cta--secondary cta--lg">Saiba mais</a>
+      <h1 class="hero__title" appReveal [revealDelay]="80">
+        {{ 'hero.titleA' | translate }}<br />
+        <span class="hero__title-accent">{{ 'hero.titleB' | translate }}</span>
+      </h1>
+      <p class="hero__lead" appReveal [revealDelay]="150">
+        {{ 'hero.lead' | translate }}
+      </p>
+      <div class="hero__actions" appReveal [revealDelay]="220">
+        <a routerLink="/baixar" class="cta cta--primary cta--lg">{{ 'hero.ctaPrimary' | translate }}</a>
+        <a routerLink="/sobre-nos" class="cta cta--secondary cta--lg">{{ 'hero.ctaSecondary' | translate }}</a>
       </div>
-
-      <div class="hero__social-proof">
+      <div class="hero__slide-text" aria-live="polite" appReveal [revealDelay]="260">
+        <p class="hero__slide-title">{{ 'hero.slide.' + activeScreen + '.title' | translate }}</p>
+        <p class="hero__slide-desc">{{ 'hero.slide.' + activeScreen + '.text' | translate }}</p>
+      </div>
+      <div class="hero__social-proof" appReveal [revealDelay]="340">
         <div class="hero__avatars" aria-hidden="true">
-          <span class="hero__avatar">🎓</span>
-          <span class="hero__avatar">📚</span>
-          <span class="hero__avatar">✏️</span>
+          <span class="hero__avatar">E</span>
+          <span class="hero__avatar">R</span>
+          <span class="hero__avatar">+</span>
         </div>
-        <div>
-          <div class="hero__stars" aria-hidden="true">★★★★★</div>
-          <p class="hero__social-text">Pensado para estudantes e vestibulandos</p>
-        </div>
+        <p class="hero__social-text">{{ 'hero.social' | translate }}</p>
       </div>
     </div>
 
-    <div class="hero__visual">
-      <app-phone-mockup />
+    <div
+      class="hero__visual"
+      appReveal="scale"
+      [revealDelay]="180"
+      (mousemove)="onVisualMouseMove($event)"
+      (mouseleave)="onVisualMouseLeave($event)"
+    >
+      <div class="hero__phone-wrap">
+        <app-phone-mockup variant="float" [screen]="activeScreen" />
+        <div class="hero__chip hero__chip--a glass-card" aria-hidden="true">
+          <span class="hero__chip-dot"></span>
+          {{ 'hero.chip.goal' | translate }}
+        </div>
+        <div class="hero__chip hero__chip--b glass-card" aria-hidden="true">
+          <span class="hero__chip-dot"></span>
+          {{ 'hero.chip.exam' | translate }}
+        </div>
+        <div class="hero__chip hero__chip--c glass-card" aria-hidden="true">
+          <span class="hero__chip-dot"></span>
+          {{ 'hero.chip.time' | translate }}
+        </div>
+      </div>
+      <div class="hero__device-controls">
+        <div class="hero__dots" role="tablist" [attr.aria-label]="'hero.choose' | translate">
+          @for (key of slideKeys; track key; let i = $index) {
+            <button
+              type="button"
+              role="tab"
+              class="hero__dot"
+              [class.hero__dot--active]="i === activeSlide"
+              [attr.aria-selected]="i === activeSlide"
+              [attr.aria-label]="'hero.slide.' + key + '.tab' | translate"
+              (click)="goTo(i)"
+            ></button>
+          }
+        </div>
+        <button type="button" class="hero__autoplay" (click)="toggleAutoplay()" [attr.aria-label]="(autoplay ? 'hero.pause' : 'hero.play') | translate">
+          @if (autoplay) {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9 5v14M15 5v14" /></svg>
+          } @else {
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7Z" /></svg>
+          }
+        </button>
+      </div>
     </div>
   </div>
-</section>
 
-<!-- CONHEÇA -->
-<section class="section conheca">
-  <div class="container conheca__inner">
-    <span class="eyebrow eyebrow--on-light">Sobre o app</span>
-    <h2 class="conheca__title">
-      Conheça sua próxima plataforma de estudos favorita
-    </h2>
-    <p class="section-head__lead conheca__lead">
-      Ainda não conhece o Eranitor? Ele reúne matérias, tarefas, agenda
-      e tempo de estudo em um único lugar, com prioridades calculadas
-      pra você saber sempre por onde começar.
-    </p>
-    <a routerLink="/sobre-nos" class="cta cta--primary cta--md">Conhecer</a>
+  <div class="hero__scroll" aria-hidden="true">
+    <span class="hero__scroll-line"></span>
+    <span>{{ 'hero.scroll' | translate }}</span>
   </div>
 </section>
 
-<!-- RECURSOS -->
-<section class="section section--alt" id="recursos">
+<section class="section cycle" aria-labelledby="cycle-title">
   <div class="container">
     <div class="section-head section-head--center">
-      <span class="eyebrow eyebrow--on-light">Recursos principais</span>
-      <h2 class="section-head__title">Tudo que você precisa pra mandar bem nos estudos</h2>
+      <span class="eyebrow eyebrow--on-light" appReveal>{{ 'cycle.eyebrow' | translate }}</span>
+      <h2 class="section-head__title" id="cycle-title" appReveal [revealDelay]="80">{{ 'cycle.title' | translate }}</h2>
+      <p class="section-head__lead" appReveal [revealDelay]="140">{{ 'cycle.lead' | translate }}</p>
     </div>
+    <ol class="cycle__track">
+      @for (i of cycleIndexes; track i) {
+        <li class="cycle__item" appReveal [revealDelay]="i * 70">
+          <span class="cycle__num">{{ i + 1 }}</span>
+          <span class="cycle__name">{{ 'cycle.step.' + i | translate }}</span>
+        </li>
+      }
+    </ol>
+  </div>
+</section>
 
+<section class="section section--alt about">
+  <div class="container about__grid">
+    <div>
+      <span class="eyebrow eyebrow--on-light" appReveal>{{ 'about.eyebrow' | translate }}</span>
+      <h2 class="section-head__title" appReveal [revealDelay]="80">{{ 'about.title' | translate }}</h2>
+      <p class="about__lead" appReveal [revealDelay]="140">
+        {{ 'about.lead' | translate }}
+      </p>
+      <a routerLink="/sobre-nos" class="cta cta--primary cta--md about__cta" appReveal [revealDelay]="200">
+        {{ 'about.cta' | translate }}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+      </a>
+    </div>
+    <div class="about__visual" appReveal="right" [revealDelay]="120">
+      <div class="about__phone">
+        <app-phone-mockup screen="track" />
+      </div>
+      <div class="about__card glass-card" aria-hidden="true">
+        <strong>{{ 'about.cardTitle' | translate }}</strong>
+        <span>{{ 'about.cardSub' | translate }}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section features" id="recursos" aria-labelledby="features-title">
+  <div class="container container--wide">
+    <div class="section-head section-head--center">
+      <span class="eyebrow eyebrow--on-light" appReveal>{{ 'features.eyebrow' | translate }}</span>
+      <h2 class="section-head__title" id="features-title" appReveal [revealDelay]="80">{{ 'features.title' | translate }}</h2>
+    </div>
     <div class="features-grid">
-      @for (feature of features; track feature.title) {
-        <app-feature-card [title]="feature.title" [description]="feature.description">
-          <ng-container icon>
-            @switch (feature.icon) {
-              @case ('book') {
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" />
-                </svg>
+      @for (i of featureIndexes; track i) {
+        <div appReveal [revealDelay]="(i % 3) * 90" [class.features__wide]="i === 0 || i === 3">
+          <app-feature-card [title]="'features.' + i + '.title' | translate" [description]="'features.' + i + '.text' | translate" [badge]="i === 5 ? ('common.soon' | translate) : ''">
+            <ng-container icon>
+              @switch (featureIcons[i]) {
+                @case ('book') {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" /></svg>
+                }
+                @case ('flag') {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1Z" /><path d="M4 22V3" /></svg>
+                }
+                @case ('calendar') {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg>
+                }
+                @case ('clock') {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 3" /></svg>
+                }
+                @case ('target') {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="5" /><circle cx="12" cy="12" r="1" fill="currentColor" /></svg>
+                }
+                @case ('chart') {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2" /></svg>
+                }
               }
-              @case ('flag') {
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1Z" />
-                  <path d="M4 22V3" />
-                </svg>
-              }
-              @case ('calendar') {
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="4" width="18" height="18" rx="2" />
-                  <path d="M16 2v4M8 2v4M3 10h18" />
-                </svg>
-              }
-              @case ('clock') {
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="9" />
-                  <path d="M12 7v5l3 3" />
-                </svg>
-              }
-            }
-          </ng-container>
-        </app-feature-card>
+            </ng-container>
+          </app-feature-card>
+        </div>
       }
     </div>
   </div>
 </section>
 
-<!-- CTA FINAL -->
-<section class="section section--navy final-cta">
-  <div class="container final-cta__inner">
-    <h2 class="section-head__title">Baixe grátis</h2>
-    <p class="section-head__lead">
-      Já disponível em breve. Comece o seu primeiro ciclo de estudos.
-    </p>
-    <a routerLink="/baixar" class="cta cta--primary cta--lg final-cta__btn">Download gratuito</a>
+<section class="spotlight-wrap">
+  <div class="container container--wide">
+    <div class="spotlight section--navy">
+      <div class="tech-grid" aria-hidden="true"></div>
+      <div class="spotlight__copy">
+        <span class="eyebrow" appReveal>{{ 'spotlight.eyebrow' | translate }}</span>
+        <h2 appReveal [revealDelay]="80">{{ 'spotlight.title' | translate }}</h2>
+        <p appReveal [revealDelay]="140">{{ 'spotlight.text' | translate }}</p>
+        <a routerLink="/baixar" class="cta cta--primary cta--lg" appReveal [revealDelay]="200">{{ 'spotlight.cta' | translate }}</a>
+      </div>
+      <div class="spotlight__visual" appReveal="right" [revealDelay]="120">
+        <app-phone-mockup variant="float" screen="review" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section audiences" aria-labelledby="audiences-title">
+  <div class="container container--wide">
+    <div class="section-head">
+      <span class="eyebrow eyebrow--on-light" appReveal>{{ 'audiences.eyebrow' | translate }}</span>
+      <h2 class="section-head__title" id="audiences-title" appReveal [revealDelay]="80">{{ 'audiences.title' | translate }}</h2>
+    </div>
+    <div class="audiences__grid">
+      @for (i of audienceIndexes; track i) {
+        <article class="audience-card audience-card--{{ i }}" appReveal [revealDelay]="i * 90">
+          <span class="audience-card__tag">{{ 'audiences.' + i + '.tag' | translate }}</span>
+          <h3>{{ 'audiences.' + i + '.title' | translate }}</h3>
+          <p>{{ 'audiences.' + i + '.text' | translate }}</p>
+          <a routerLink="/sobre-nos" class="audience-card__arrow" [attr.aria-label]="('audiences.more' | translate) + ' ' + ('audiences.' + i + '.tag' | translate)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg>
+          </a>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="download-cta-wrap">
+  <div class="container container--wide">
+    <div class="download-cta section--navy">
+      <div class="tech-grid" aria-hidden="true"></div>
+      <div class="download-cta__copy">
+        <span class="eyebrow" appReveal>{{ 'dlcta.eyebrow' | translate }}</span>
+        <h2 appReveal [revealDelay]="80">{{ 'dlcta.title' | translate }}</h2>
+        <p appReveal [revealDelay]="140">{{ 'dlcta.text' | translate }}</p>
+        <div class="download-cta__badges" appReveal [revealDelay]="200">
+          <app-store-badge platform="google-play" [available]="false" />
+          <app-store-badge platform="app-store" [available]="false" />
+        </div>
+        <div class="download-cta__qr" role="note" appReveal [revealDelay]="260">
+          <div class="download-cta__qr-box" aria-hidden="true"><span>{{ 'dlcta.qrTitle' | translate }}</span></div>
+          <p>{{ 'dlcta.qrText' | translate }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
