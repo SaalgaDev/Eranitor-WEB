@@ -6,7 +6,7 @@ import {
   RouterLinkActive,
   RouterOutlet,
   provideRouter
-} from "./chunk-ENIMN6E2.js";
+} from "./chunk-CZMGGFVX.js";
 import {
   APP_INITIALIZER,
   CommonModule,
@@ -53,29 +53,29 @@ import {
   ɵɵtextInterpolate1,
   ɵɵtextInterpolate2,
   ɵɵviewQuery
-} from "./chunk-UA3FDTCO.js";
+} from "./chunk-NZFAXOOV.js";
 import "./chunk-Y5RQAIA6.js";
 
 // src/app/app.routes.ts
 var routes = [
   {
     path: "",
-    loadComponent: () => import("./chunk-OBST3DSO.js").then((m) => m.HomeComponent),
+    loadComponent: () => import("./chunk-MIQQFYJT.js").then((m) => m.HomeComponent),
     title: "Eranitor \u2014 Estudar nunca foi t\xE3o organizado"
   },
   {
     path: "sobre-nos",
-    loadComponent: () => import("./chunk-4JIG7PTG.js").then((m) => m.SobreComponent),
+    loadComponent: () => import("./chunk-4PEDM4YP.js").then((m) => m.SobreComponent),
     title: "Sobre n\xF3s \u2014 Eranitor"
   },
   {
     path: "contato",
-    loadComponent: () => import("./chunk-6E2665U2.js").then((m) => m.ContatoComponent),
+    loadComponent: () => import("./chunk-H3OWFIAU.js").then((m) => m.ContatoComponent),
     title: "Contato \u2014 Eranitor"
   },
   {
     path: "baixar",
-    loadComponent: () => import("./chunk-SU37DH56.js").then((m) => m.DownloadComponent),
+    loadComponent: () => import("./chunk-DSTBDGDB.js").then((m) => m.DownloadComponent),
     title: "Baixar o Eranitor"
   },
   { path: "**", redirectTo: "" }

@@ -28118,9 +28118,9 @@ var VERSION3 = new Version("18.2.14");
 // src/app/core/i18n.service.ts
 var STORAGE_KEY = "eranitor-lang";
 var loaders = {
-  "pt-BR": () => import("./chunk-IEXXS3CC.js"),
-  en: () => import("./chunk-RFQWD5NH.js"),
-  es: () => import("./chunk-MLIGH5OL.js")
+  "pt-BR": () => import("./chunk-QCZYZAOZ.js"),
+  en: () => import("./chunk-O4RPE3OH.js"),
+  es: () => import("./chunk-JHZDINQ7.js")
 };
 var I18nService = class _I18nService {
   title;
@@ -28461,4 +28461,4 @@ export {
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-UA3FDTCO.js.map
+//# sourceMappingURL=chunk-NZFAXOOV.js.map

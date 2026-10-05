@@ -4,6 +4,17 @@
   leadKey="page.about.lead"
 />
 
+<nav class="guide">
+  <div class="container guide__inner" appReveal>
+    <span class="guide__label">{{ 'page.about.guideLabel' | translate }}</span>
+    <div class="guide__links">
+      @for (g of guideLinks; track g.target) {
+        <button type="button" class="guide__pill" (click)="scrollTo(g.target)">{{ g.key | translate }}</button>
+      }
+    </div>
+  </div>
+</nav>
+
 <section class="section">
   <div class="container missao__grid">
     <div class="section-head">
@@ -14,6 +25,53 @@
       <p>{{ 'page.about.missionP1' | translate }}</p>
       <p>{{ 'page.about.missionP2' | translate }}</p>
     </div>
+  </div>
+</section>
+
+<section class="section section--alt" id="origem" aria-labelledby="origem-title">
+  <div class="container">
+    <div class="origin__grid">
+      <div class="origin__sticky">
+        <span class="eyebrow eyebrow--on-light" appReveal>{{ 'page.about.originEyebrow' | translate }}</span>
+        <h2 class="section-head__title" id="origem-title" appReveal [revealDelay]="80">{{ 'page.about.originTitle' | translate }}</h2>
+        <p class="origin__lead" appReveal [revealDelay]="140">{{ 'page.about.originLead' | translate }}</p>
+        <blockquote class="origin__quote" appReveal [revealDelay]="200">
+          {{ 'page.about.quote' | translate }}
+        </blockquote>
+      </div>
+      <div class="origin__body">
+        <h3 class="origin__subtitle" appReveal>{{ 'page.about.signalsTitle' | translate }}</h3>
+        <ol class="signals">
+          @for (i of signalIndexes; track i) {
+            <li class="signals__item" appReveal [revealDelay]="i * 90">
+              <span class="signals__num" aria-hidden="true">{{ i + 1 }}</span>
+              <div>
+                <h4>{{ 'page.about.signal.' + i + '.title' | translate }}</h4>
+                <p>{{ 'page.about.signal.' + i + '.text' | translate }}</p>
+              </div>
+            </li>
+          }
+        </ol>
+        <div class="solution" appReveal>
+          <h3>{{ 'page.about.solutionTitle' | translate }}</h3>
+          <p>{{ 'page.about.solutionText' | translate }}</p>
+          <ul class="principles" aria-label="Principles">
+            @for (i of signalIndexes; track i) {
+              <li class="principles__chip">{{ 'page.about.principle.' + i | translate }}</li>
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+    <dl class="stats" aria-label="Stats">
+      @for (i of statIndexes; track i) {
+        <div class="stats__item" appReveal [revealDelay]="i * 80">
+          <dt class="sr-only">{{ 'page.about.stat.' + i + '.label' | translate }}</dt>
+          <dd class="stats__num"><span [attr.data-count]="'page.about.stat.' + i + '.value' | translate">{{ 'page.about.stat.' + i + '.value' | translate }}</span><span class="stats__suffix">{{ 'page.about.stat.' + i + '.suffix' | translate }}</span></dd>
+          <dd class="stats__label">{{ 'page.about.stat.' + i + '.label' | translate }}</dd>
+        </div>
+      }
+    </dl>
   </div>
 </section>
 
@@ -37,6 +95,29 @@
   </div>
 </section>
 
+<section class="section" id="publico" aria-labelledby="publico-title">
+  <div class="container container--wide">
+    <div class="section-head">
+      <span class="eyebrow eyebrow--on-light" appReveal>{{ 'page.about.audienceEyebrow' | translate }}</span>
+      <h2 class="section-head__title" id="publico-title" appReveal [revealDelay]="80">{{ 'page.about.audienceTitle' | translate }}</h2>
+      <p class="section-head__lead" appReveal [revealDelay]="140">{{ 'page.about.audienceLead' | translate }}</p>
+    </div>
+    <div class="who-grid">
+      @for (i of whoIndexes; track i) {
+        <article class="who-card" appReveal [revealDelay]="i * 90">
+          <span class="who-card__tag">{{ 'page.about.who.' + i + '.tag' | translate }}</span>
+          <h3>{{ 'page.about.who.' + i + '.title' | translate }}</h3>
+          <p>{{ 'page.about.who.' + i + '.text' | translate }}</p>
+          <p class="who-card__help">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
+            {{ 'page.about.who.' + i + '.help' | translate }}
+          </p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
 <section class="section section--alt">
   <div class="container container--wide">
     <div class="section-head section-head--center">
@@ -51,6 +132,72 @@
         </div>
       }
     </div>
+  </div>
+</section>
+
+<section class="section" id="diferenciais" aria-labelledby="diff-title">
+  <div class="container">
+    <div class="section-head section-head--center">
+      <span class="eyebrow eyebrow--on-light" appReveal>{{ 'page.about.diffEyebrow' | translate }}</span>
+      <h2 class="section-head__title" id="diff-title" appReveal [revealDelay]="80">{{ 'page.about.diffTitle' | translate }}</h2>
+      <p class="section-head__lead" appReveal [revealDelay]="140">{{ 'page.about.diffLead' | translate }}</p>
+    </div>
+    <ul class="diff-list">
+      @for (i of diffIndexes; track i) {
+        <li class="diff-list__item" appReveal [revealDelay]="(i % 2) * 90">
+          <span class="diff-list__check" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+          </span>
+          <div>
+            <h3>{{ 'page.about.diff.' + i + '.title' | translate }}</h3>
+            <p>{{ 'page.about.diff.' + i + '.text' | translate }}</p>
+          </div>
+        </li>
+      }
+    </ul>
+    <details class="honest" appReveal>
+      <summary class="honest__summary">
+        <span>
+          <strong>{{ 'page.about.honestTitle' | translate }}</strong>
+          <small>{{ 'page.about.honestText' | translate }}</small>
+        </span>
+        <span class="honest__icon" aria-hidden="true">+</span>
+      </summary>
+      <ul class="honest__list">
+        @for (i of honestIndexes; track i) {
+          <li>{{ 'page.about.honest.' + i | translate }}</li>
+        }
+      </ul>
+    </details>
+  </div>
+</section>
+
+<section class="section section--alt" id="jornada" aria-labelledby="jornada-title">
+  <div class="container journey__grid">
+    <div>
+      <span class="eyebrow eyebrow--on-light" appReveal>{{ 'page.about.journeyEyebrow' | translate }}</span>
+      <h2 class="section-head__title" id="jornada-title" appReveal [revealDelay]="80">{{ 'page.about.journeyTitle' | translate }}</h2>
+      <p class="section-head__lead" appReveal [revealDelay]="140">{{ 'page.about.journeyLead' | translate }}</p>
+      <div class="future" appReveal [revealDelay]="200">
+        <h3>{{ 'page.about.futureTitle' | translate }}</h3>
+        <ul>
+          @for (i of futureIndexes; track i) {
+            <li>{{ 'page.about.future.' + i | translate }}</li>
+          }
+        </ul>
+      </div>
+      <p class="tcc-note" appReveal [revealDelay]="240">{{ 'page.about.tccNote' | translate }}</p>
+    </div>
+    <ol class="timeline">
+      @for (i of phaseIndexes; track i) {
+        <li class="timeline__item" appReveal [revealDelay]="i * 90">
+          <span class="timeline__dot" aria-hidden="true"></span>
+          <span class="timeline__phase">{{ 'page.about.phase.' + i + '.date' | translate }}</span>
+          <h3>{{ 'page.about.phase.' + i + '.title' | translate }}</h3>
+          <p>{{ 'page.about.phase.' + i + '.text' | translate }}</p>
+        </li>
+      }
+    </ol>
   </div>
 </section>
 

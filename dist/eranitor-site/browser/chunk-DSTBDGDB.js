@@ -1,13 +1,13 @@
 import {
   PhoneMockupComponent,
   StoreBadgeComponent
-} from "./chunk-P6LUKXYV.js";
+} from "./chunk-VAE3UO5D.js";
 import {
   PageHeroComponent
-} from "./chunk-4ZQR6UNA.js";
+} from "./chunk-PAYULNBZ.js";
 import {
   RevealDirective
-} from "./chunk-C6P7IBYN.js";
+} from "./chunk-P5JX75SE.js";
 import {
   CommonModule,
   TranslatePipe,
@@ -27,7 +27,7 @@ import {
   ɵɵtext,
   ɵɵtextInterpolate,
   ɵɵtextInterpolate1
-} from "./chunk-UA3FDTCO.js";
+} from "./chunk-NZFAXOOV.js";
 import "./chunk-Y5RQAIA6.js";
 
 // src/app/pages/download/download.component.ts
@@ -149,4 +149,4 @@ var DownloadComponent = class _DownloadComponent {
 export {
   DownloadComponent
 };
-//# sourceMappingURL=chunk-SU37DH56.js.map
+//# sourceMappingURL=chunk-DSTBDGDB.js.map
