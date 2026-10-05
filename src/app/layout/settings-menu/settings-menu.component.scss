@@ -44,7 +44,7 @@
 .settings__panel {
   position: absolute;
   top: calc(100% + 0.85rem);
-  right: 0;
+  right: -0.25rem;
   width: min(19rem, calc(100vw - 2rem));
   background: var(--settings-bg);
   color: var(--settings-ink);
@@ -59,9 +59,9 @@
   grid-template-rows: 0fr;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-10px) scale(0.98);
-  transform-origin: top right;
-  transition: grid-template-rows var(--dur-base) var(--ease-standard), opacity var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-standard), visibility 0s linear var(--dur-base);
+  transform: translateY(-0.85rem) scale(0.94);
+  transform-origin: calc(100% - 1rem) top;
+  transition: grid-template-rows var(--dur-base) var(--ease-standard), opacity var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-spring), visibility 0s linear var(--dur-base);
   pointer-events: none;
 }
 
@@ -84,9 +84,16 @@
   grid-template-rows: 1fr;
   opacity: 1;
   visibility: visible;
-  transform: none;
+  transform: translateY(0) scale(1);
   pointer-events: auto;
-  transition: grid-template-rows var(--dur-base) var(--ease-standard), opacity var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-standard), visibility 0s;
+  animation: settings-pop-in var(--dur-slow) var(--ease-spring) both;
+  transition: grid-template-rows var(--dur-base) var(--ease-standard), opacity var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-spring), visibility 0s;
+}
+
+@keyframes settings-pop-in {
+  0% { opacity: 0; transform: translateY(-0.85rem) scale(0.94); }
+  70% { opacity: 1; transform: translateY(0.12rem) scale(1.012); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .settings__inner {
@@ -257,5 +264,6 @@
   }
   .settings__panel {
     transform: none;
+    animation: none;
   }
 }

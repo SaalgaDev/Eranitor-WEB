@@ -19,4 +19,12 @@ export class LogoComponent {
   @Input() variant: 'light' | 'dark' = 'light';
   /** Se falso, mostra apenas o símbolo (uso em espaços reduzidos, ex. favicon-like). */
   @Input() showWordmark = true;
+  /** Coloque a marca oficial em public/assets/images/logo.png. */
+  @Input() src = 'assets/images/logo.png';
+
+  imageAvailable = true;
+
+  onImageError(): void {
+    this.imageAvailable = false;
+  }
 }

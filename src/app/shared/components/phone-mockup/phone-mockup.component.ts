@@ -14,6 +14,14 @@ export type PhoneScreen = 'plan' | 'track' | 'review';
 export class PhoneMockupComponent {
   @Input() variant: 'inline' | 'float' = 'inline';
   @Input() screen: PhoneScreen = 'plan';
+  /** Coloque a prévia do aplicativo em public/assets/images/tela1.png. */
+  @Input() src = 'assets/images/tela1.png';
+
+  imageAvailable = true;
+
+  onImageError(): void {
+    this.imageAvailable = false;
+  }
 
   readonly order: PhoneScreen[] = ['plan', 'track', 'review'];
 

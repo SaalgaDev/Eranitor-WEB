@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/components/logo/logo.component.scss"],
+  "sourcesContent": [".logo {\n  display: inline-flex;\n  align-items: center;\n  min-height: 2.25rem;\n}\n\n.logo__image {\n  display: block;\n  width: auto;\n  height: 2rem;\n  max-width: min(11rem, 35vw);\n  object-fit: contain;\n  object-position: left center;\n}\n\n.logo__fallback {\n  color: var(--on-navy-100);\n  font-family: var(--font-display);\n  font-size: 1.25rem;\n  font-weight: 800;\n  letter-spacing: -0.04em;\n}\n\n.logo--dark .logo__fallback {\n  color: var(--navy-950);\n}\n\n:host-context(.footer) .logo__image {\n  height: 2.25rem;\n  max-width: 12.5rem;\n}\n\n@media (max-width: 480px) {\n  .logo__image { height: 1.75rem; }\n}\n"],
+  "mappings": ";AAAA,CAAA;AACE,WAAA;AACA,eAAA;AACA,cAAA;;AAGF,CAAA;AACE,WAAA;AACA,SAAA;AACA,UAAA;AACA,aAAA,IAAA,KAAA,EAAA;AACA,cAAA;AACA,mBAAA,KAAA;;AAGF,CAAA;AACE,SAAA,IAAA;AACA,eAAA,IAAA;AACA,aAAA;AACA,eAAA;AACA,kBAAA;;AAGF,CAAA,WAAA,CARA;AASE,SAAA,IAAA;;AAGF,cAAA,CAAA,QAAA,CArBA;AAsBE,UAAA;AACA,aAAA;;AAGF,OAAA,CAAA,SAAA,EAAA;AACE,GA3BF;AA2BiB,YAAA;;;",
+  "names": []
+}
