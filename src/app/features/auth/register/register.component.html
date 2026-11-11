@@ -1,0 +1,134 @@
+<div class="auth-page">
+  <div class="tech-grid" aria-hidden="true"></div>
+  <section class="auth-card auth-card--wide" aria-labelledby="register-title">
+    <div class="auth-card__brand">
+      <app-logo size="large" />
+    </div>
+
+    <h1 class="auth-card__title" id="register-title">{{ 'auth.register.title' | translate }}</h1>
+    <p class="auth-card__subtitle">{{ 'auth.register.subtitle' | translate }}</p>
+
+    <form class="auth-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+      <div class="auth-field">
+        <label for="nome">{{ 'auth.field.name' | translate }}</label>
+        <input
+          id="nome"
+          type="text"
+          formControlName="nome"
+          autocomplete="name"
+          [attr.aria-invalid]="showError('nome')"
+          [attr.aria-describedby]="showError('nome') ? 'nome-error' : null"
+        />
+        @if (showError('nome')) {
+          <span class="auth-field__error" id="nome-error">{{ 'auth.error.name' | translate }}</span>
+        }
+      </div>
+
+      <div class="auth-field">
+        <label for="login">{{ 'auth.field.email' | translate }}</label>
+        <input
+          id="login"
+          type="email"
+          formControlName="login"
+          autocomplete="email"
+          [attr.placeholder]="'auth.field.loginPlaceholder' | translate"
+          [attr.aria-invalid]="showError('login')"
+          [attr.aria-describedby]="showError('login') ? 'login-error' : null"
+        />
+        @if (showError('login')) {
+          <span class="auth-field__error" id="login-error">{{ 'auth.error.email' | translate }}</span>
+        }
+      </div>
+
+      <div class="auth-field">
+        <label for="senha">{{ 'auth.field.password' | translate }}</label>
+        <div class="auth-password">
+          <input
+            id="senha"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="senha"
+            autocomplete="new-password"
+            aria-describedby="senha-hint"
+            [attr.aria-invalid]="showError('senha')"
+          />
+          <button type="button" class="auth-password__toggle" (click)="showPassword = !showPassword" [attr.aria-pressed]="showPassword">
+            {{ (showPassword ? 'auth.password.hide' : 'auth.password.show') | translate }}
+          </button>
+        </div>
+        @if (showError('senha')) {
+          <span class="auth-field__error" id="senha-hint">{{ 'auth.error.passwordRule' | translate }}</span>
+        } @else {
+          <span class="auth-field__hint" id="senha-hint">{{ 'auth.password.rule' | translate }}</span>
+        }
+      </div>
+
+      <div class="auth-field">
+        <label for="confirmaSenha">{{ 'auth.field.confirmPassword' | translate }}</label>
+        <input
+          id="confirmaSenha"
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="confirmaSenha"
+          autocomplete="new-password"
+          [attr.aria-invalid]="mismatch()"
+          [attr.aria-describedby]="mismatch() ? 'confirma-error' : null"
+        />
+        @if (mismatch()) {
+          <span class="auth-field__error" id="confirma-error">{{ 'auth.error.mismatch' | translate }}</span>
+        }
+      </div>
+
+      <div class="auth-form__row">
+        <div class="auth-field">
+          <label for="serie">{{ 'auth.field.grade' | translate }}</label>
+          <select
+            id="serie"
+            formControlName="serie"
+            [attr.aria-invalid]="showError('serie')"
+            [attr.aria-describedby]="showError('serie') ? 'serie-error' : null"
+          >
+            <option value="" disabled>{{ 'auth.field.gradePlaceholder' | translate }}</option>
+            @for (group of grades; track group.label) {
+              <optgroup [label]="group.label">
+                @for (option of group.options; track option.value) {
+                  <option [value]="option.value">{{ option.label }}</option>
+                }
+              </optgroup>
+            }
+          </select>
+          @if (showError('serie')) {
+            <span class="auth-field__error" id="serie-error">{{ 'auth.error.grade' | translate }}</span>
+          }
+        </div>
+
+        <div class="auth-field">
+          <label for="instituicao">{{ 'auth.field.school' | translate }}</label>
+          <input
+            id="instituicao"
+            type="text"
+            formControlName="instituicao"
+            autocomplete="organization"
+            [attr.aria-invalid]="showError('instituicao')"
+            [attr.aria-describedby]="showError('instituicao') ? 'instituicao-error' : null"
+          />
+          @if (showError('instituicao')) {
+            <span class="auth-field__error" id="instituicao-error">{{ 'auth.error.school' | translate }}</span>
+          }
+        </div>
+      </div>
+
+      @if (error) {
+        <div class="auth-alert" role="alert">{{ error | translate }}</div>
+      }
+
+      <button type="submit" class="cta cta--primary cta--lg auth-submit" [disabled]="loading">
+        {{ (loading ? 'auth.register.loading' : 'auth.register.submit') | translate }}
+      </button>
+    </form>
+
+    <p class="auth-card__footer">
+      {{ 'auth.register.hasAccount' | translate }}
+      <a routerLink="/auth/login" [queryParams]="returnUrl ? { returnUrl } : null">{{ 'auth.register.toLogin' | translate }}</a>
+    </p>
+    <p class="auth-card__note">{{ 'auth.demoNote' | translate }}</p>
+  </section>
+</div>

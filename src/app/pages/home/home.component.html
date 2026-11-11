@@ -1,18 +1,7 @@
-<section
-  class="hero section--navy"
-  aria-roledescription="carousel"
-  [attr.aria-label]="'hero.carousel' | translate"
-  (keydown)="onHeroKeydown($event)"
-  (mouseenter)="pause()"
-  (mouseleave)="resume()"
-  (focusin)="pause()"
-  (focusout)="resume()"
->
+<section class="hero section--navy" aria-labelledby="hero-title">
   <div class="hero__bg" aria-hidden="true">
     <div class="hero__aurora"></div>
     <div class="tech-grid"></div>
-    <div class="hero__glow hero__glow--a"></div>
-    <div class="hero__glow hero__glow--b"></div>
   </div>
 
   <div class="container container--wide hero__grid">
@@ -21,9 +10,9 @@
         <span class="hero__pulse" aria-hidden="true"></span>
         {{ 'hero.badge' | translate }}
       </p>
-      <h1 class="hero__title" appReveal [revealDelay]="80">
-        {{ 'hero.titleA' | translate }}<br />
-        <span class="hero__title-accent">{{ 'hero.titleB' | translate }}</span>
+      <h1 class="hero__title" id="hero-title" appReveal [revealDelay]="80">
+        <span class="hero__title-line">{{ 'hero.titleA' | translate }}</span>
+        <span class="hero__title-line hero__title-accent">{{ 'hero.titleB' | translate }}</span>
       </h1>
       <p class="hero__lead" appReveal [revealDelay]="150">
         {{ 'hero.lead' | translate }}
@@ -32,18 +21,15 @@
         <a routerLink="/baixar" class="cta cta--primary cta--lg">{{ 'hero.ctaPrimary' | translate }}</a>
         <a routerLink="/sobre-nos" class="cta cta--secondary cta--lg">{{ 'hero.ctaSecondary' | translate }}</a>
       </div>
-      <div class="hero__slide-text" aria-live="polite" appReveal [revealDelay]="260">
-        <p class="hero__slide-title">{{ 'hero.slide.' + activeScreen + '.title' | translate }}</p>
-        <p class="hero__slide-desc">{{ 'hero.slide.' + activeScreen + '.text' | translate }}</p>
-      </div>
-      <div class="hero__social-proof" appReveal [revealDelay]="340">
-        <div class="hero__avatars" aria-hidden="true">
-          <span class="hero__avatar">E</span>
-          <span class="hero__avatar">R</span>
-          <span class="hero__avatar">+</span>
-        </div>
-        <p class="hero__social-text">{{ 'hero.social' | translate }}</p>
-      </div>
+      <ul class="hero__highlights" appReveal [revealDelay]="300">
+        @for (key of highlightKeys; track key) {
+          <li class="hero__highlight">
+            <span class="hero__highlight-tab">{{ 'hero.slide.' + key + '.tab' | translate }}</span>
+            <strong>{{ 'hero.slide.' + key + '.title' | translate }}</strong>
+            <span class="hero__highlight-text">{{ 'hero.slide.' + key + '.text' | translate }}</span>
+          </li>
+        }
+      </ul>
     </div>
 
     <div
@@ -54,55 +40,15 @@
       (mouseleave)="onVisualMouseLeave($event)"
     >
       <div class="hero__phone-wrap">
-        <app-phone-mockup variant="float" [screen]="activeScreen" />
-        <div class="hero__chip hero__chip--a glass-card" aria-hidden="true">
-          <span class="hero__chip-dot"></span>
-          {{ 'hero.chip.goal' | translate }}
-        </div>
-        <div class="hero__chip hero__chip--b glass-card" aria-hidden="true">
-          <span class="hero__chip-dot"></span>
-          {{ 'hero.chip.exam' | translate }}
-        </div>
-        <div class="hero__chip hero__chip--c glass-card" aria-hidden="true">
-          <span class="hero__chip-dot"></span>
-          {{ 'hero.chip.time' | translate }}
-        </div>
-      </div>
-      <div class="hero__device-controls">
-        <div class="hero__dots" role="tablist" [attr.aria-label]="'hero.choose' | translate">
-          @for (key of slideKeys; track key; let i = $index) {
-            <button
-              type="button"
-              role="tab"
-              class="hero__dot"
-              [class.hero__dot--active]="i === activeSlide"
-              [attr.aria-selected]="i === activeSlide"
-              [attr.aria-label]="'hero.slide.' + key + '.tab' | translate"
-              (click)="goTo(i)"
-            ></button>
-          }
-        </div>
-        <button type="button" class="hero__autoplay" (click)="toggleAutoplay()" [attr.aria-label]="(autoplay ? 'hero.pause' : 'hero.play') | translate">
-          @if (autoplay) {
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9 5v14M15 5v14" /></svg>
-          } @else {
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7Z" /></svg>
-          }
-        </button>
+        <app-phone-mockup variant="float" [priority]="true" />
       </div>
     </div>
-  </div>
-
-  <div class="hero__scroll" aria-hidden="true">
-    <span class="hero__scroll-line"></span>
-    <span>{{ 'hero.scroll' | translate }}</span>
   </div>
 </section>
 
 <section class="section cycle" aria-labelledby="cycle-title">
   <div class="container">
     <div class="section-head section-head--center">
-      <span class="eyebrow eyebrow--on-light" appReveal>{{ 'cycle.eyebrow' | translate }}</span>
       <h2 class="section-head__title" id="cycle-title" appReveal [revealDelay]="80">{{ 'cycle.title' | translate }}</h2>
       <p class="section-head__lead" appReveal [revealDelay]="140">{{ 'cycle.lead' | translate }}</p>
     </div>
@@ -120,7 +66,6 @@
 <section class="section section--alt about">
   <div class="container about__grid">
     <div>
-      <span class="eyebrow eyebrow--on-light" appReveal>{{ 'about.eyebrow' | translate }}</span>
       <h2 class="section-head__title" appReveal [revealDelay]="80">{{ 'about.title' | translate }}</h2>
       <p class="about__lead" appReveal [revealDelay]="140">
         {{ 'about.lead' | translate }}
@@ -131,13 +76,9 @@
       </a>
     </div>
     <div class="about__visual" appReveal="right" [revealDelay]="120">
-      <div class="about__phone">
-        <app-phone-mockup screen="track" />
-      </div>
-      <div class="about__card glass-card" aria-hidden="true">
-        <strong>{{ 'about.cardTitle' | translate }}</strong>
-        <span>{{ 'about.cardSub' | translate }}</span>
-      </div>
+      <figure class="about__crop">
+        <img src="assets/images/tela1.png" width="1081" height="1921" loading="lazy" decoding="async" [attr.alt]="'about.cropAlt' | translate" />
+      </figure>
     </div>
   </div>
 </section>
@@ -145,12 +86,11 @@
 <section class="section features" id="recursos" aria-labelledby="features-title">
   <div class="container container--wide">
     <div class="section-head section-head--center">
-      <span class="eyebrow eyebrow--on-light" appReveal>{{ 'features.eyebrow' | translate }}</span>
       <h2 class="section-head__title" id="features-title" appReveal [revealDelay]="80">{{ 'features.title' | translate }}</h2>
     </div>
-    <div class="features-grid">
+    <div class="features-panel">
       @for (i of featureIndexes; track i) {
-        <div appReveal [revealDelay]="(i % 3) * 90" [class.features__wide]="i === 0 || i === 3">
+        <div appReveal [revealDelay]="(i % 3) * 90">
           <app-feature-card [title]="'features.' + i + '.title' | translate" [description]="'features.' + i + '.text' | translate" [badge]="i === 5 ? ('common.soon' | translate) : ''">
             <ng-container icon>
               @switch (featureIcons[i]) {
@@ -186,13 +126,12 @@
     <div class="spotlight section--navy">
       <div class="tech-grid" aria-hidden="true"></div>
       <div class="spotlight__copy">
-        <span class="eyebrow" appReveal>{{ 'spotlight.eyebrow' | translate }}</span>
         <h2 appReveal [revealDelay]="80">{{ 'spotlight.title' | translate }}</h2>
         <p appReveal [revealDelay]="140">{{ 'spotlight.text' | translate }}</p>
         <a routerLink="/baixar" class="cta cta--primary cta--lg" appReveal [revealDelay]="200">{{ 'spotlight.cta' | translate }}</a>
       </div>
       <div class="spotlight__visual" appReveal="right" [revealDelay]="120">
-        <app-phone-mockup variant="float" screen="review" />
+        <app-phone-mockup />
       </div>
     </div>
   </div>
@@ -201,7 +140,6 @@
 <section class="section audiences" aria-labelledby="audiences-title">
   <div class="container container--wide">
     <div class="section-head">
-      <span class="eyebrow eyebrow--on-light" appReveal>{{ 'audiences.eyebrow' | translate }}</span>
       <h2 class="section-head__title" id="audiences-title" appReveal [revealDelay]="80">{{ 'audiences.title' | translate }}</h2>
     </div>
     <div class="audiences__grid">
@@ -224,7 +162,6 @@
     <div class="download-cta section--navy">
       <div class="tech-grid" aria-hidden="true"></div>
       <div class="download-cta__copy">
-        <span class="eyebrow" appReveal>{{ 'dlcta.eyebrow' | translate }}</span>
         <h2 appReveal [revealDelay]="80">{{ 'dlcta.title' | translate }}</h2>
         <p appReveal [revealDelay]="140">{{ 'dlcta.text' | translate }}</p>
         <div class="download-cta__badges" appReveal [revealDelay]="200">

@@ -1,0 +1,84 @@
+<header class="topbar">
+  <div class="topbar__pill">
+    @if (isSubpage) {
+      <a class="topbar__circle" routerLink="/dashboard" aria-label="Voltar ao início">
+        <app-icon name="back" />
+      </a>
+    } @else {
+      <span class="topbar__circle topbar__circle--mark" aria-hidden="true">
+        <app-logo kind="icon" [route]="null" />
+      </span>
+    }
+
+    <app-logo class="topbar__brand" kind="wordmark" size="large" route="/dashboard" />
+
+    <a
+      class="topbar__circle"
+      routerLink="/dashboard/perfil"
+      routerLinkActive="topbar__circle--active"
+      [attr.aria-label]="'Minha conta: ' + (user?.nome || 'estudante')"
+    >
+      <app-icon name="user" />
+    </a>
+  </div>
+</header>
+
+<button
+  #trigger
+  class="menu-trigger"
+  [class.menu-trigger--hidden]="menuOpen && !menuClosing"
+  type="button"
+  (click)="toggleMenu()"
+  [attr.aria-expanded]="menuOpen"
+  aria-controls="dashboard-menu"
+  aria-label="Abrir menu de navegação"
+>
+  <span class="menu-trigger__stack" aria-hidden="true">
+    <span class="menu-trigger__layer menu-trigger__layer--3"></span>
+    <span class="menu-trigger__layer menu-trigger__layer--2"></span>
+    <span class="menu-trigger__layer menu-trigger__layer--1"></span>
+    <span class="menu-trigger__face"><i></i><i></i><i></i></span>
+  </span>
+</button>
+
+@if (menuOpen) {
+  <div
+    class="menu-backdrop"
+    [class.menu-backdrop--closing]="menuClosing"
+    [style.--origin-x.px]="originX"
+    [style.--origin-y.px]="originY"
+    (click)="closeMenu()"
+  >
+    <nav
+      id="dashboard-menu"
+      class="menu-sheet"
+      [class.menu-sheet--closing]="menuClosing"
+      aria-label="Áreas do Eranitor"
+      (click)="$event.stopPropagation()"
+    >
+      <ul class="menu-grid">
+        @for (item of menuItems; track item.label) {
+          <li>
+            <button
+              type="button"
+              class="menu-card"
+              [class.menu-card--current]="isCurrent(item)"
+              [attr.aria-current]="isCurrent(item) ? 'page' : null"
+              (click)="goTo(item)"
+            >
+              {{ item.label }}
+            </button>
+          </li>
+        }
+      </ul>
+      <div class="menu-foot">
+        <button type="button" class="btn btn--ghost" (click)="logout()">
+          <app-icon name="logout" /> Sair da conta
+        </button>
+        <button type="button" class="icon-btn icon-btn--accent" (click)="closeMenu()" aria-label="Fechar menu">
+          <app-icon name="close" />
+        </button>
+      </div>
+    </nav>
+  </div>
+}

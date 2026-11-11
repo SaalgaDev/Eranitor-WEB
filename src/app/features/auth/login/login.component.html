@@ -1,0 +1,64 @@
+<div class="auth-page">
+  <div class="tech-grid" aria-hidden="true"></div>
+  <section class="auth-card" aria-labelledby="login-title">
+    <div class="auth-card__brand">
+      <app-logo size="large" />
+    </div>
+
+    <h1 class="auth-card__title" id="login-title">{{ 'auth.login.title' | translate }}</h1>
+    <p class="auth-card__subtitle">{{ 'auth.login.subtitle' | translate }}</p>
+
+    <form class="auth-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+      <div class="auth-field">
+        <label for="login">{{ 'auth.field.login' | translate }}</label>
+        <input
+          id="login"
+          type="text"
+          formControlName="login"
+          autocomplete="username"
+          inputmode="email"
+          [attr.placeholder]="'auth.field.loginPlaceholder' | translate"
+          [attr.aria-invalid]="showError('login')"
+          [attr.aria-describedby]="showError('login') ? 'login-error' : null"
+        />
+        @if (showError('login')) {
+          <span class="auth-field__error" id="login-error">{{ 'auth.error.login' | translate }}</span>
+        }
+      </div>
+
+      <div class="auth-field">
+        <label for="senha">{{ 'auth.field.password' | translate }}</label>
+        <div class="auth-password">
+          <input
+            id="senha"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="senha"
+            autocomplete="current-password"
+            [attr.aria-invalid]="showError('senha')"
+            [attr.aria-describedby]="showError('senha') ? 'senha-error' : null"
+          />
+          <button type="button" class="auth-password__toggle" (click)="showPassword = !showPassword" [attr.aria-pressed]="showPassword">
+            {{ (showPassword ? 'auth.password.hide' : 'auth.password.show') | translate }}
+          </button>
+        </div>
+        @if (showError('senha')) {
+          <span class="auth-field__error" id="senha-error">{{ 'auth.error.passwordRequired' | translate }}</span>
+        }
+      </div>
+
+      @if (error) {
+        <div class="auth-alert" role="alert">{{ error | translate }}</div>
+      }
+
+      <button type="submit" class="cta cta--primary cta--lg auth-submit" [disabled]="loading">
+        {{ (loading ? 'auth.login.loading' : 'auth.login.submit') | translate }}
+      </button>
+    </form>
+
+    <p class="auth-card__footer">
+      {{ 'auth.login.noAccount' | translate }}
+      <a routerLink="/auth/cadastro" [queryParams]="returnUrl ? { returnUrl } : null">{{ 'auth.login.toRegister' | translate }}</a>
+    </p>
+    <p class="auth-card__note">{{ 'auth.demoNote' | translate }}</p>
+  </section>
+</div>

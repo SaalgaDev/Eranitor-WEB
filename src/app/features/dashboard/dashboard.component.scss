@@ -1,0 +1,221 @@
+:host { display: block; }
+
+.home-grid {
+  display: grid;
+  gap: var(--d-gap);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 0.9fr);
+  grid-template-areas:
+    'tasks chart subjects'
+    'tasks pie   subjects'
+    'time  time  time';
+}
+
+.area-tasks { grid-area: tasks; }
+.area-chart { grid-area: chart; }
+.area-pie { grid-area: pie; }
+.area-subjects { grid-area: subjects; }
+.area-time { grid-area: time; }
+
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+
+  .bar { flex: 1; }
+}
+
+.progress__value {
+  min-width: 3ch;
+  font-weight: 800;
+  color: var(--ice-200);
+  text-align: right;
+}
+
+.quick-add {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 14px;
+  background: var(--d-panel-2);
+  border-radius: var(--d-r-item);
+}
+
+.inline-add.quick-add { display: flex; }
+
+.quick-add__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.area-tasks .row-list {
+  align-content: start;
+}
+
+.subjects {
+  max-height: 420px;
+}
+
+.subject-link {
+  color: var(--d-on-panel);
+  text-decoration: none;
+
+  app-icon { color: var(--d-on-panel-muted); }
+  &:hover app-icon { color: var(--d-accent); }
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-bottom: 14px;
+  font-size: 0.8125rem;
+  color: var(--d-on-panel-muted);
+
+  li { display: inline-flex; align-items: center; gap: 8px; }
+  b { margin-left: auto; color: var(--d-on-panel); }
+}
+
+.legend--stacked {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.bars {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  flex: 1;
+  min-height: 220px;
+}
+
+.bars__axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 28px;
+  font-size: 0.75rem;
+  color: var(--d-on-panel-muted);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.bars__plot {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+  background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 20%);
+  background-size: 100% calc(100% - 28px);
+  background-repeat: no-repeat;
+}
+
+.bars__col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bars__stack {
+  flex: 1;
+  width: min(44px, 80%);
+  display: flex;
+  flex-direction: column-reverse;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.bars__seg {
+  display: block;
+  width: 100%;
+
+  &:last-child { border-radius: 6px 6px 0 0; }
+}
+
+.bars__label {
+  height: 28px;
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
+  color: var(--d-on-panel);
+  white-space: nowrap;
+}
+
+.pie {
+  display: grid;
+  grid-template-columns: minmax(120px, 160px) 1fr;
+  align-items: center;
+  gap: 20px;
+}
+
+.pie__chart {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.06);
+}
+
+.time {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-bottom: 16px;
+}
+
+.time__total {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+
+  strong {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  span { color: var(--d-on-panel-muted); }
+}
+
+.time__top {
+  display: grid;
+  gap: 2px;
+  text-align: right;
+
+  span { font-size: 0.8125rem; color: var(--d-on-panel-muted); }
+  strong { font-family: var(--font-display); font-size: 1.125rem; }
+}
+
+.bar--thick { height: 14px; }
+.bar__fill--blue { background: var(--chart-blue); }
+
+@media (max-width: 1100px) {
+  .home-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      'tasks    chart'
+      'tasks    pie'
+      'time     time'
+      'subjects subjects';
+  }
+}
+
+@media (max-width: 760px) {
+  .home-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'tasks' 'time' 'subjects' 'chart' 'pie';
+  }
+
+  .time__top { text-align: left; }
+}
+
+@media (max-width: 420px) {
+  .pie { grid-template-columns: 1fr; justify-items: center; }
+  .pie__chart { width: 160px; }
+  .quick-add__row { grid-template-columns: 1fr; }
+}

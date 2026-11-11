@@ -1,5 +1,4 @@
 <app-page-hero
-  eyebrowKey="page.download.eyebrow"
   titleKey="page.download.title"
   leadKey="page.download.lead"
 >
@@ -18,7 +17,6 @@
   <div class="container download-main__grid">
     <div>
       <div class="section-head">
-        <span class="eyebrow eyebrow--on-light" appReveal>{{ 'page.download.stepsEyebrow' | translate }}</span>
         <h2 class="section-head__title" appReveal [revealDelay]="80">{{ 'page.download.stepsTitle' | translate }}</h2>
       </div>
       <ol class="steps">
@@ -40,7 +38,7 @@
       </div>
     </div>
     <div class="download-main__visual" appReveal="scale">
-      <app-phone-mockup variant="float" screen="plan" />
+      <app-phone-mockup />
     </div>
   </div>
 </section>
@@ -48,7 +46,6 @@
 <section class="section section--alt compat">
   <div class="container container--narrow compat__inner">
     <div class="section-head section-head--center">
-      <span class="eyebrow eyebrow--on-light" appReveal>{{ 'page.download.compatEyebrow' | translate }}</span>
       <h2 class="section-head__title" appReveal [revealDelay]="80">{{ 'page.download.compatTitle' | translate }}</h2>
       <p class="section-head__lead" appReveal [revealDelay]="140">
         {{ 'page.download.compatText' | translate }}

@@ -1,0 +1,15 @@
+<app-nav-sidebar />
+<div class="dash-main">
+  <router-outlet />
+</div>
+<p class="dash-footnote">Versão de demonstração: seus dados ficam salvos só neste navegador até o app ser ligado ao servidor.</p>
+
+@if (confirm.current(); as request) {
+  <app-dialog [title]="request.title" (close)="confirm.answer(false)">
+    <p class="dialog__text">{{ request.message }}</p>
+    <div class="dialog__actions">
+      <button type="button" class="btn btn--ghost" (click)="confirm.answer(false)">Cancelar</button>
+      <button type="button" class="btn btn--danger" (click)="confirm.answer(true)">{{ request.confirmLabel }}</button>
+    </div>
+  </app-dialog>
+}

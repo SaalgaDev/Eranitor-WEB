@@ -1,7 +1,11 @@
 <a class="skip-link" href="#main-content">{{ 'skip' | translate }}</a>
-<app-header />
+@if (showSiteChrome) {
+  <app-header />
+}
 <main id="main-content">
   <router-outlet />
 </main>
-<app-footer />
+@if (showSiteChrome) {
+  <app-footer />
+}
 <div class="sr-only" role="status" aria-live="polite">{{ i18n.announcement() }}</div>

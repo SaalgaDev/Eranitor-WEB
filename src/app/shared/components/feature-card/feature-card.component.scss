@@ -1,19 +1,19 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
 .feature-card {
-  background: var(--card-bg);
+  background: var(--surface);
   color: var(--text);
-  border: 2px solid var(--hard-color);
-  border-radius: var(--radius-xl);
-  padding: clamp(1.25rem, 1rem + 1.5vw, 2rem);
-  box-shadow: 3px 3px 0 var(--hard-color);
-  transition: transform var(--dur-base) var(--ease-standard), box-shadow var(--dur-base) var(--ease-standard), var(--theme-transition);
+  padding: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
   height: 100%;
   position: relative;
-  overflow: hidden;
+  transition: background-color var(--dur-base) var(--ease-standard);
 }
 
 .feature-card:hover {
-  transform: translate(-3px, -3px);
-  box-shadow: 5px 5px 0 var(--hard-color), var(--shadow-glow-soft);
+  background: var(--surface-elev);
 }
 
 .feature-card__top {
@@ -67,8 +67,3 @@
   line-height: var(--lh-normal);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .feature-card:hover {
-    transform: none;
-  }
-}

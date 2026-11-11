@@ -36,7 +36,6 @@ export class SobreComponent implements AfterViewInit {
     if (!el) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
-    // Move o foco para acessibilidade sem disparar nova rolagem
     if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1');
     el.focus({ preventScroll: true });
   }

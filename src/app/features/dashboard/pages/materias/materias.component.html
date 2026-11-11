@@ -1,0 +1,121 @@
+<section class="dash-page">
+  <header class="dash-head">
+    <div>
+      <h1 class="dash-head__title">Gerenciar matérias</h1>
+      <p class="dash-head__lede">Organize suas disciplinas e os tópicos de cada uma.</p>
+    </div>
+    <span class="tag"><app-icon name="book" /> {{ ativas.length }} matérias</span>
+  </header>
+
+  <div class="manager">
+    <article class="panel" aria-labelledby="subjects-title">
+      <header class="panel__head">
+        <h2 class="panel__title" id="subjects-title">Matérias</h2>
+        <span class="count">{{ ativas.length }}</span>
+      </header>
+
+      <form class="inline-add" (ngSubmit)="adicionarMateria()">
+        <label class="sr-only" for="new-subject">Nova matéria</label>
+        <input id="new-subject" name="novaMateria" class="input" type="text" maxlength="100" [(ngModel)]="novaMateria" placeholder="Nova matéria" required />
+        <button type="submit" class="icon-btn icon-btn--accent" aria-label="Adicionar matéria"><app-icon name="plus" /></button>
+      </form>
+
+      <ul class="row-list scroll-list list" aria-label="Selecionar matéria">
+        @for (m of ativas; track m.id) {
+          <li>
+            <button type="button" class="row select-row" [class.row--selected]="m.id === materiaId" [attr.aria-pressed]="m.id === materiaId" (click)="selecionarMateria(m)">
+              <span class="row__main">
+                <span class="row__title">{{ m.nome }}</span>
+                <span class="row__meta">{{ concluidos(m) }} de {{ m.topicos.length }} tópicos concluídos</span>
+              </span>
+              <app-icon name="chevron-right" />
+            </button>
+          </li>
+        } @empty {
+          <li class="empty">Nenhuma matéria ainda. Adicione a primeira acima.</li>
+        }
+      </ul>
+
+      @if (materia) {
+        <form class="panel__foot stack" (ngSubmit)="renomearMateria()">
+          <div class="field">
+            <label class="field__label" for="subject-name">Nome da matéria</label>
+            <div class="inline-add">
+              <input id="subject-name" name="nomeMateria" class="input" type="text" maxlength="100" [(ngModel)]="nomeMateria" required />
+              <button type="submit" class="icon-btn icon-btn--accent" aria-label="Salvar nome da matéria"><app-icon name="check" /></button>
+            </div>
+          </div>
+          <button type="button" class="btn btn--danger btn--sm align-start" (click)="arquivarMateria()">
+            <app-icon name="archive" /> Arquivar matéria
+          </button>
+        </form>
+      }
+    </article>
+
+    <article class="panel" aria-labelledby="topics-title">
+      <header class="panel__head">
+        <div>
+          <h2 class="panel__title" id="topics-title">{{ materia?.nome || 'Tópicos' }}</h2>
+          <p class="panel__sub">Tópicos e conteúdos</p>
+        </div>
+        <span class="count">{{ materia?.topicos?.length || 0 }}</span>
+      </header>
+
+      @if (materia) {
+        <form class="inline-add" (ngSubmit)="adicionarTopico()">
+          <label class="sr-only" for="new-topic">Novo tópico</label>
+          <input id="new-topic" name="novoTopico" class="input" type="text" maxlength="150" [(ngModel)]="novoTopico" placeholder="Novo tópico ou conteúdo" required />
+          <button type="submit" class="icon-btn icon-btn--accent" aria-label="Adicionar tópico"><app-icon name="plus" /></button>
+        </form>
+
+        <ul class="row-list scroll-list list list--tall">
+          @for (t of materia.topicos; track t.id) {
+            <li class="row" [class.row--selected]="t.id === topicoId" [class.row--done]="t.concluido">
+              <button type="button" class="check" [attr.aria-pressed]="t.concluido" [attr.aria-label]="(t.concluido ? 'Reabrir ' : 'Concluir ') + t.nome" (click)="alternarTopico(t)">
+                <app-icon name="check" />
+              </button>
+              <button type="button" class="row__main" (click)="selecionarTopico(t)" [attr.aria-label]="'Editar ' + t.nome">
+                <span class="row__title">{{ t.nome }}</span>
+              </button>
+              <app-icon name="edit" class="row__hint" aria-hidden="true" />
+            </li>
+          } @empty {
+            <li class="empty">Esta matéria ainda não tem tópicos. Adicione o primeiro acima.</li>
+          }
+        </ul>
+      } @else {
+        <div class="empty">Escolha ou crie uma matéria para ver os tópicos.</div>
+      }
+    </article>
+
+    <article class="panel" aria-labelledby="editor-title">
+      <header class="panel__head">
+        <div>
+          <h2 class="panel__title" id="editor-title">Editar tópico</h2>
+          @if (materia) { <p class="panel__sub">{{ materia.nome }}</p> }
+        </div>
+      </header>
+
+      @if (topico) {
+        <form class="stack" (ngSubmit)="salvarTopico()">
+          <div class="field">
+            <label class="field__label" for="topic-title">Título do tópico</label>
+            <input id="topic-title" name="nomeTopico" class="input" type="text" maxlength="150" [(ngModel)]="nomeTopico" required />
+          </div>
+          <label class="toggle">
+            <input name="topicoConcluido" type="checkbox" [(ngModel)]="topicoConcluido" />
+            Conteúdo concluído
+          </label>
+          <div class="dialog__actions dialog__actions--split panel__foot">
+            <button type="button" class="btn btn--danger" (click)="removerTopico()"><app-icon name="trash" /> Excluir</button>
+            <button type="submit" class="btn btn--primary">Salvar</button>
+          </div>
+        </form>
+      } @else {
+        <div class="empty">Selecione um tópico da lista para editar.</div>
+      }
+    </article>
+  </div>
+
+  @if (feedback) { <p class="feedback" role="status">{{ feedback }}</p> }
+</section>

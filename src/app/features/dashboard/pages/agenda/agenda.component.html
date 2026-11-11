@@ -1,0 +1,141 @@
+<section class="dash-page">
+  <header class="dash-head">
+    <div>
+      <h1 class="dash-head__title">Agenda</h1>
+      <p class="dash-head__lede">Prazos de tarefas e compromissos em um só calendário.</p>
+    </div>
+    <button type="button" class="btn btn--dark" (click)="novoEvento()">
+      <app-icon name="plus" /> Novo compromisso
+    </button>
+  </header>
+
+  @if (eventos$ | async; as eventos) {
+    <div class="agenda">
+      <article class="panel calendar" aria-label="Calendário mensal">
+        <div class="calendar__paper">
+          <header class="month">
+            <button type="button" class="icon-btn icon-btn--sm" (click)="mudarMes(-1)" aria-label="Mês anterior">
+              <app-icon name="chevron-left" />
+            </button>
+            <h2 class="month__title">{{ tituloMes }}</h2>
+            <button type="button" class="icon-btn icon-btn--sm" (click)="mudarMes(1)" aria-label="Próximo mês">
+              <app-icon name="chevron-right" />
+            </button>
+          </header>
+
+          <div class="grid7 weekdays" aria-hidden="true">
+            @for (dia of diasSemana; track $index) { <span>{{ dia }}</span> }
+          </div>
+
+          <div class="grid7 days">
+            @for (cell of celulas; track cell.iso) {
+              <button
+                type="button"
+                class="day"
+                [class.day--outside]="!cell.noMes"
+                [class.day--selected]="cell.iso === dataSelecionada"
+                [class.day--today]="ehHoje(cell.iso)"
+                [attr.aria-pressed]="cell.iso === dataSelecionada"
+                [attr.aria-label]="rotuloData(cell.iso) + (doDia(eventos, cell.iso).length ? ', ' + doDia(eventos, cell.iso).length + ' compromisso(s)' : '')"
+                (click)="selecionar(cell)"
+              >
+                <span class="day__num">{{ cell.dia }}</span>
+                <span class="day__dots" aria-hidden="true">
+                  @for (evento of doDia(eventos, cell.iso).slice(0, 3); track evento.uid) {
+                    <i class="event-dot" [style.background]="corDo(evento)" [class.event-dot--done]="evento.concluida"></i>
+                  }
+                  @if (doDia(eventos, cell.iso).length > 3) {
+                    <span class="day__more">+{{ doDia(eventos, cell.iso).length - 3 }}</span>
+                  }
+                </span>
+              </button>
+            }
+          </div>
+
+          <ul class="types" aria-label="Legenda dos tipos">
+            @for (tipo of tipos; track tipo) {
+              <li><i class="event-dot" [style.background]="corTipo[tipo]" aria-hidden="true"></i>{{ tipo }}</li>
+            }
+          </ul>
+        </div>
+      </article>
+
+      <aside class="panel day-panel" aria-live="polite">
+        <header class="panel__head">
+          <div>
+            <h2 class="panel__title day-panel__title">{{ rotuloSelecionado() }}</h2>
+            <p class="panel__sub">{{ doDia(eventos, dataSelecionada).length || 'Nenhum' }} compromisso(s)</p>
+          </div>
+          <button type="button" class="icon-btn icon-btn--accent" (click)="novoEvento()" aria-label="Adicionar compromisso neste dia">
+            <app-icon name="plus" />
+          </button>
+        </header>
+
+        @if (doDia(eventos, dataSelecionada).length) {
+          <ul class="row-list">
+            @for (evento of doDia(eventos, dataSelecionada); track evento.uid) {
+              <li class="row" [class.row--done]="evento.concluida">
+                <i class="event-dot event-dot--lg" [style.background]="corDo(evento)" aria-hidden="true"></i>
+                <div class="row__main">
+                  <span class="row__title">{{ evento.titulo }}</span>
+                  <span class="row__meta">{{ evento.fonte === 'tarefa' ? 'Tarefa' : evento.tipo }}@if (evento.materiaId) { · {{ nomeMateria(evento) }} }</span>
+                </div>
+                @if (evento.fonte === 'tarefa' && evento.tarefaId) {
+                  <button
+                    type="button"
+                    class="check"
+                    [attr.aria-pressed]="!!evento.concluida"
+                    [attr.aria-label]="(evento.concluida ? 'Reabrir ' : 'Concluir ') + evento.titulo"
+                    (click)="mock.alternarConclusao(evento.tarefaId!)"
+                  >
+                    <app-icon name="check" />
+                  </button>
+                } @else {
+                  <button type="button" class="icon-btn icon-btn--quiet icon-btn--sm" (click)="editarEvento(evento)" [attr.aria-label]="'Editar ' + evento.titulo">
+                    <app-icon name="edit" />
+                  </button>
+                  <button type="button" class="icon-btn icon-btn--quiet icon-btn--danger icon-btn--sm" (click)="removerEvento(evento)" [attr.aria-label]="'Excluir ' + evento.titulo">
+                    <app-icon name="trash" />
+                  </button>
+                }
+              </li>
+            }
+          </ul>
+        } @else {
+          <div class="empty">
+            <p>Dia livre. Quer marcar algo?</p>
+            <button type="button" class="btn btn--primary btn--sm" (click)="novoEvento()">Adicionar compromisso</button>
+          </div>
+        }
+      </aside>
+    </div>
+  }
+</section>
+
+@if (dialogAberto) {
+  <app-dialog [title]="editandoId === null ? 'Novo compromisso' : 'Editar compromisso'" (close)="fechar()">
+    <form class="dialog-form" (ngSubmit)="salvarEvento()">
+      <div class="field">
+        <label class="field__label" for="event-title">Título</label>
+        <input id="event-title" name="titulo" class="input" type="text" maxlength="150" [(ngModel)]="titulo" placeholder="Ex.: Prova de História" required />
+      </div>
+      <div class="form-cols">
+        <div class="field">
+          <label class="field__label" for="event-type">Tipo</label>
+          <select id="event-type" name="tipo" class="input" [(ngModel)]="tipo">
+            @for (t of tipos; track t) { <option [ngValue]="t">{{ t }}</option> }
+          </select>
+        </div>
+        <div class="field">
+          <label class="field__label" for="event-date">Data</label>
+          <input id="event-date" name="data" class="input" type="date" [(ngModel)]="data" required />
+        </div>
+      </div>
+      @if (erro) { <p class="form-error" role="alert">{{ erro }}</p> }
+      <div class="dialog__actions">
+        <button type="button" class="btn btn--ghost" (click)="fechar()">Cancelar</button>
+        <button type="submit" class="btn btn--primary">Salvar compromisso</button>
+      </div>
+    </form>
+  </app-dialog>
+}

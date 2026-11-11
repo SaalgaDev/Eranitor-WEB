@@ -110,8 +110,6 @@
   }
 }
 
-/* --- Expansão Sobre Nós: preserva tokens, ritmo e hierarquia --- */
-
 section[id] {
   scroll-margin-top: calc(var(--header-height) + 1rem);
 }
@@ -484,7 +482,7 @@ section[id] {
 }
 
 .honest__list li::before {
-  content: "—";
+  content: "•";
   position: absolute;
   left: 0;
   color: var(--ice-500);

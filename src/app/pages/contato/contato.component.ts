@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import { PageHeroComponent } from '../../shared/components/page-hero/page-hero.component';
 import { RevealDirective } from '../../shared/directives/reveal.directive';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
@@ -9,13 +9,13 @@ interface Channel {
   titleKey: string;
   value?: string;
   valueKey?: string;
-  href: string;
+  href?: string;
 }
 
 @Component({
   selector: 'app-contato',
   standalone: true,
-  imports: [CommonModule, PageHeroComponent, RevealDirective, TranslatePipe],
+  imports: [NgTemplateOutlet, PageHeroComponent, RevealDirective, TranslatePipe],
   templateUrl: './contato.component.html',
   styleUrl: './contato.component.scss',
 })
@@ -31,7 +31,6 @@ export class ContatoComponent {
       icon: 'instagram',
       titleKey: 'page.contact.instagram',
       valueKey: 'page.contact.instagramValue',
-      href: '#',
     },
   ];
 }

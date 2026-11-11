@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
 import { HeaderComponent } from './layout/header/header.component';
@@ -14,11 +14,24 @@ import { TranslatePipe } from './shared/pipes/translate.pipe';
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
-  constructor(readonly i18n: I18nService, private router: Router) {}
+  readonly i18n = inject(I18nService);
+  showSiteChrome = true;
+
+  constructor(private router: Router) {
+  }
 
   ngOnInit(): void {
+    this.updateSiteChrome(this.router.url);
     this.router.events
       .pipe(filter((e) => e instanceof NavigationEnd))
-      .subscribe((e) => this.i18n.updateSeo((e as NavigationEnd).urlAfterRedirects));
+      .subscribe((e) => {
+        const url = (e as NavigationEnd).urlAfterRedirects;
+        this.updateSiteChrome(url);
+        this.i18n.updateSeo(url);
+      });
+  }
+
+  private updateSiteChrome(url: string): void {
+    this.showSiteChrome = !url.startsWith('/dashboard');
   }
 }

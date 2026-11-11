@@ -1,0 +1,119 @@
+<section class="dash-page">
+  <header class="dash-head">
+    <div>
+      <h1 class="dash-head__title">Tarefas</h1>
+      <p class="dash-head__lede">Tarefas com prazo também aparecem na agenda.</p>
+    </div>
+    <button type="button" class="btn btn--dark" (click)="novaTarefa()">
+      <app-icon name="plus" /> Nova tarefa
+    </button>
+  </header>
+
+  @if (tarefas$ | async; as tarefas) {
+    <article class="panel">
+      <header class="panel__head tasks-head">
+        <div class="filters" role="group" aria-label="Filtrar tarefas">
+          @for (f of filtros; track f.id) {
+            <button type="button" class="filter" [attr.aria-pressed]="filtro === f.id" (click)="filtro = f.id">
+              {{ f.rotulo }} <span class="count">{{ contar(tarefas, f.id) }}</span>
+            </button>
+          }
+        </div>
+      </header>
+
+      <ul class="row-list">
+        @for (tarefa of filtradas(tarefas); track tarefa.id) {
+          <li class="row task" [class.row--done]="tarefa.status === 'concluida'">
+            <button
+              type="button"
+              class="check"
+              [attr.aria-pressed]="tarefa.status === 'concluida'"
+              [attr.aria-label]="(tarefa.status === 'concluida' ? 'Reabrir ' : 'Concluir ') + tarefa.titulo"
+              (click)="mock.alternarConclusao(tarefa.id)"
+            >
+              <app-icon name="check" />
+            </button>
+            <span class="task__color" [style.background]="tarefa.cor || 'var(--d-accent)'" aria-hidden="true"></span>
+            <div class="row__main">
+              <span class="row__title">{{ tarefa.titulo }}</span>
+              <span class="row__meta">{{ tarefa.descricao || 'Sem descrição' }}</span>
+            </div>
+            <span class="task__meta">
+              <span class="task__subject">{{ mock.nomeMateria(tarefa.materiaId) }}</span>
+              <span class="task__date">
+                <app-icon name="calendar" />
+                {{ tarefa.prazo ? (tarefa.prazo | date: 'dd/MM/yyyy' : 'UTC') : 'Sem prazo' }}
+              </span>
+              <span class="chip" [class.chip--late]="tarefa.status === 'atrasada'" [class.chip--done]="tarefa.status === 'concluida'">
+                {{ rotuloStatus[tarefa.status] }}
+              </span>
+            </span>
+            <span class="task__actions">
+              <button type="button" class="icon-btn icon-btn--quiet icon-btn--sm" (click)="editar(tarefa)" [attr.aria-label]="'Editar ' + tarefa.titulo">
+                <app-icon name="edit" />
+              </button>
+              <button type="button" class="icon-btn icon-btn--quiet icon-btn--danger icon-btn--sm" (click)="remover(tarefa)" [attr.aria-label]="'Excluir ' + tarefa.titulo">
+                <app-icon name="trash" />
+              </button>
+            </span>
+          </li>
+        } @empty {
+          <li class="empty">
+            <p>{{ filtro === 'todas' ? 'Você ainda não tem tarefas.' : 'Nenhuma tarefa neste filtro.' }}</p>
+            @if (filtro === 'todas') {
+              <button type="button" class="btn btn--primary btn--sm" (click)="novaTarefa()">Criar a primeira tarefa</button>
+            }
+          </li>
+        }
+      </ul>
+    </article>
+  }
+
+  @if (feedback) { <p class="feedback" role="status">{{ feedback }}</p> }
+</section>
+
+@if (formAberto) {
+  <app-dialog [title]="editando ? 'Editar tarefa' : 'Nova tarefa'" (close)="fechar()">
+    <form class="dialog-form" (ngSubmit)="salvar()">
+      <div class="field">
+        <label class="field__label" for="task-title">Título</label>
+        <input id="task-title" name="titulo" class="input" type="text" maxlength="150" [(ngModel)]="titulo" required />
+      </div>
+      <div class="form-cols">
+        <div class="field">
+          <label class="field__label" for="task-subject">Matéria</label>
+          <select id="task-subject" name="materia" class="input" [(ngModel)]="materiaId">
+            @for (materia of materiasAtivas$ | async; track materia.id) {
+              <option [ngValue]="materia.id">{{ materia.nome }}</option>
+            }
+          </select>
+        </div>
+        <div class="field">
+          <label class="field__label" for="task-date">Prazo (opcional)</label>
+          <input id="task-date" name="prazo" class="input" type="date" [(ngModel)]="prazo" />
+        </div>
+      </div>
+      <fieldset class="field colors">
+        <legend class="field__label">Cor na agenda</legend>
+        <div class="colors__list">
+          @for (c of cores; track c.valor) {
+            <label class="colors__item">
+              <input type="radio" name="cor" [value]="c.valor" [(ngModel)]="cor" />
+              <span class="colors__swatch" [style.background]="c.valor" aria-hidden="true"></span>
+              {{ c.nome }}
+            </label>
+          }
+        </div>
+      </fieldset>
+      <div class="field">
+        <label class="field__label" for="task-description">Descrição</label>
+        <textarea id="task-description" name="descricao" class="input" maxlength="2000" [(ngModel)]="descricao"></textarea>
+      </div>
+      @if (erro) { <p class="form-error" role="alert">{{ erro }}</p> }
+      <div class="dialog__actions">
+        <button type="button" class="btn btn--ghost" (click)="fechar()">Cancelar</button>
+        <button type="submit" class="btn btn--primary">{{ editando ? 'Salvar alterações' : 'Criar tarefa' }}</button>
+      </div>
+    </form>
+  </app-dialog>
+}

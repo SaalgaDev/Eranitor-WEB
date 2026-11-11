@@ -1,0 +1,49 @@
+<section class="dash-page profile-page">
+  <header class="dash-head">
+    <h1 class="dash-head__title">Minha conta</h1>
+  </header>
+
+  <article class="panel profile">
+    <div class="profile__id">
+      <span class="profile__avatar" aria-hidden="true">{{ iniciais }}</span>
+      <div>
+        <p class="profile__name">{{ user?.nome || 'Estudante' }}</p>
+        <p class="profile__login">{{ user?.login }}</p>
+      </div>
+    </div>
+
+    <dl class="profile__data">
+      <div>
+        <dt>Série / ano</dt>
+        <dd>{{ user?.serie || 'Não informado' }}</dd>
+      </div>
+      <div>
+        <dt>Instituição</dt>
+        <dd>{{ user?.instituicao || 'Não informada' }}</dd>
+      </div>
+    </dl>
+
+    <footer class="panel__foot profile__foot">
+      <button type="button" class="btn btn--danger" (click)="sair()">
+        <app-icon name="logout" /> Sair da conta
+      </button>
+    </footer>
+  </article>
+
+  @if (resumo$ | async; as r) {
+    <ul class="stats" aria-label="Seus números">
+      <li class="panel stat">
+        <span class="stat__value">{{ r.materias }}</span>
+        <span class="stat__label">matérias ativas</span>
+      </li>
+      <li class="panel stat">
+        <span class="stat__value">{{ r.concluidas }}/{{ r.tarefas }}</span>
+        <span class="stat__label">tarefas concluídas</span>
+      </li>
+      <li class="panel stat">
+        <span class="stat__value">{{ r.tempo }}</span>
+        <span class="stat__label">estudados neste mês</span>
+      </li>
+    </ul>
+  }
+</section>

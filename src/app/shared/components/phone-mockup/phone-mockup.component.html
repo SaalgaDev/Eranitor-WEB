@@ -1,15 +1,29 @@
 <div class="phone" [class.phone--float]="variant === 'float'">
-  @if (imageAvailable) {
-    <img
-      class="phone__image"
-      [src]="src"
-      alt="Prévia do aplicativo Eranitor"
-      (error)="onImageError()"
-    />
-  } @else {
-    <div class="phone__placeholder" role="img" aria-label="Prévia do aplicativo Eranitor">
-      <span>Prévia do app</span>
-      <small>Adicione <strong>tela1.png</strong> em assets/images</small>
+  <div class="phone__body">
+    <span class="phone__btn phone__btn--action" aria-hidden="true"></span>
+    <span class="phone__btn phone__btn--vol-up" aria-hidden="true"></span>
+    <span class="phone__btn phone__btn--vol-down" aria-hidden="true"></span>
+    <span class="phone__btn phone__btn--power" aria-hidden="true"></span>
+    <div class="phone__screen">
+      @if (imageAvailable) {
+        <img
+          class="phone__image"
+          [src]="src"
+          width="1081"
+          height="1921"
+          [attr.alt]="'phone.alt' | translate"
+          [attr.loading]="priority ? 'eager' : 'lazy'"
+          [attr.fetchpriority]="priority ? 'high' : null"
+          decoding="async"
+          (error)="onImageError()"
+        />
+      } @else {
+        <div class="phone__placeholder" role="img" [attr.aria-label]="'phone.alt' | translate">
+          <span>{{ 'phone.placeholder' | translate }}</span>
+        </div>
+      }
+      <span class="phone__island" aria-hidden="true"></span>
+      <span class="phone__glare" aria-hidden="true"></span>
     </div>
-  }
+  </div>
 </div>

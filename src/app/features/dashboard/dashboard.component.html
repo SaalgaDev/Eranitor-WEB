@@ -1,0 +1,227 @@
+<section class="dash-page">
+  <header class="dash-head">
+    <div>
+      <h1 class="dash-head__title">Olá, {{ primeiroNome }}!</h1>
+      <p class="dash-head__lede">Um passo de cada vez. Veja como seus estudos estão avançando.</p>
+    </div>
+    <span class="tag"><span class="dot" aria-hidden="true"></span>Mês atual: {{ mesAtual }}</span>
+  </header>
+
+  <div class="home-grid">
+    <article class="panel area-tasks" aria-labelledby="home-tasks-title">
+      @if (tarefas$ | async; as tarefas) {
+        <header class="panel__head">
+          <div>
+            <h2 class="panel__title" id="home-tasks-title">Tarefas</h2>
+            <p class="panel__sub">{{ concluidas(tarefas) }} de {{ tarefas.length }} concluídas</p>
+          </div>
+          <button type="button" class="icon-btn icon-btn--accent" (click)="adicionarAberto = !adicionarAberto" [attr.aria-expanded]="adicionarAberto" aria-label="Adicionar tarefa">
+            <app-icon [name]="adicionarAberto ? 'close' : 'plus'" />
+          </button>
+        </header>
+
+        <div class="progress">
+          <div class="bar" role="progressbar" aria-label="Tarefas concluídas" aria-valuemin="0" aria-valuemax="100" [attr.aria-valuenow]="percentual(tarefas)">
+            <div class="bar__fill" [style.width.%]="percentual(tarefas)"></div>
+          </div>
+          <span class="progress__value">{{ percentual(tarefas) }}%</span>
+        </div>
+
+        @if (adicionarAberto) {
+          <form class="quick-add" (ngSubmit)="adicionarTarefa()">
+            <div class="field">
+              <label class="field__label" for="home-task-title">Nova tarefa</label>
+              <input id="home-task-title" name="titulo" class="input" type="text" maxlength="150" [(ngModel)]="novoTitulo" placeholder="Ex.: Revisar equações" required />
+            </div>
+            <div class="quick-add__row">
+              <div class="field">
+                <label class="field__label" for="home-task-subject">Matéria</label>
+                <select id="home-task-subject" name="materia" class="input" [(ngModel)]="novaMateriaId">
+                  @for (materia of materiasAtivas$ | async; track materia.id) {
+                    <option [ngValue]="materia.id">{{ materia.nome }}</option>
+                  }
+                </select>
+              </div>
+              <div class="field">
+                <label class="field__label" for="home-task-date">Prazo</label>
+                <input id="home-task-date" name="prazo" class="input" type="date" [(ngModel)]="novoPrazo" />
+              </div>
+            </div>
+            <button type="submit" class="btn btn--primary">Salvar tarefa</button>
+          </form>
+        }
+
+        <ul class="row-list panel__body">
+          @for (tarefa of tarefas; track tarefa.id) {
+            <li class="row" [class.row--done]="tarefa.status === 'concluida'">
+              <button
+                type="button"
+                class="check"
+                [attr.aria-pressed]="tarefa.status === 'concluida'"
+                [attr.aria-label]="(tarefa.status === 'concluida' ? 'Reabrir ' : 'Concluir ') + tarefa.titulo"
+                (click)="mock.alternarConclusao(tarefa.id)"
+              >
+                <app-icon name="check" />
+              </button>
+              <button type="button" class="row__main" (click)="abrirEdicao(tarefa)" [attr.aria-label]="'Editar ' + tarefa.titulo">
+                <span class="row__title">{{ tarefa.titulo }}</span>
+                <span class="row__meta">{{ mock.nomeMateria(tarefa.materiaId) }}@if (tarefa.prazo) { · {{ tarefa.prazo | date: 'dd/MM' : 'UTC' }} }</span>
+              </button>
+              @if (tarefa.status === 'atrasada') {
+                <span class="chip chip--late">Atrasada</span>
+              }
+            </li>
+          } @empty {
+            <li class="empty">Nenhuma tarefa ainda. Use o botão + para criar a primeira.</li>
+          }
+        </ul>
+
+        <footer class="panel__foot">
+          <a routerLink="/dashboard/tarefas" class="btn btn--ghost btn--sm">Ver todas as tarefas</a>
+        </footer>
+      }
+    </article>
+
+    <article class="panel area-chart" id="porcentagem" aria-labelledby="home-chart-title">
+      <header class="panel__head">
+        <div>
+          <h2 class="panel__title" id="home-chart-title">Porcentagem</h2>
+          <p class="panel__sub">Horas por tipo de estudo em cada matéria</p>
+        </div>
+      </header>
+      <ul class="legend">
+        @for (tipo of tiposEstudo; track tipo.chave) {
+          <li><span class="dot" [style.background]="tipo.cor" aria-hidden="true"></span>{{ tipo.rotulo }}</li>
+        }
+      </ul>
+      @if (barras$ | async; as barras) {
+        <div class="bars" role="img" [attr.aria-label]="descreverBarras(barras)">
+          <div class="bars__axis" aria-hidden="true">
+            @for (v of eixo; track v) { <span>{{ v }}</span> }
+          </div>
+          <div class="bars__plot">
+            @for (barra of barras; track barra.categoria) {
+              <div class="bars__col">
+                <div class="bars__stack">
+                  @for (tipo of tiposEstudo; track tipo.chave) {
+                    <span class="bars__seg" [style.height.%]="escala(barra[tipo.chave])" [style.background]="tipo.cor"></span>
+                  }
+                </div>
+                <span class="bars__label">{{ barra.categoria }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </article>
+
+    <article class="panel area-pie" id="desempenho" aria-labelledby="home-pie-title">
+      <header class="panel__head">
+        <div>
+          <h2 class="panel__title" id="home-pie-title">Desempenho</h2>
+          <p class="panel__sub">Distribuição do estudo por matéria</p>
+        </div>
+      </header>
+      @if (desempenho$ | async; as setores) {
+        <div class="pie">
+          <div class="pie__chart" role="img" [attr.aria-label]="descreverDesempenho(setores)" [style.background]="gradientePizza(setores)"></div>
+          <ul class="legend legend--stacked">
+            @for (setor of setores; track setor.rotulo) {
+              <li><span class="dot" [style.background]="setor.cor" aria-hidden="true"></span>{{ setor.rotulo }} <b>{{ setor.percentual }}%</b></li>
+            }
+          </ul>
+        </div>
+      }
+    </article>
+
+    <article class="panel area-subjects" aria-labelledby="home-subjects-title">
+      <header class="panel__head">
+        <div>
+          <h2 class="panel__title" id="home-subjects-title">Gerenciar matéria</h2>
+          <p class="panel__sub">Toque para abrir os tópicos</p>
+        </div>
+        <button type="button" class="icon-btn icon-btn--accent" (click)="adicionarMateriaAberto = !adicionarMateriaAberto" [attr.aria-expanded]="adicionarMateriaAberto" aria-label="Adicionar matéria">
+          <app-icon [name]="adicionarMateriaAberto ? 'close' : 'plus'" />
+        </button>
+      </header>
+
+      @if (adicionarMateriaAberto) {
+        <form class="inline-add quick-add" (ngSubmit)="adicionarMateria()">
+          <label class="sr-only" for="home-subject-name">Nome da matéria</label>
+          <input id="home-subject-name" name="materia" class="input" type="text" maxlength="100" [(ngModel)]="novaMateria" placeholder="Nome da matéria" required />
+          <button type="submit" class="btn btn--primary">Salvar</button>
+        </form>
+        @if (erroMateria) { <p class="form-error" role="alert">{{ erroMateria }}</p> }
+      }
+
+      <ul class="row-list scroll-list subjects">
+        @for (materia of materiasAtivas$ | async; track materia.id) {
+          <li>
+            <a class="row subject-link" [routerLink]="['/dashboard/materias']" [queryParams]="{ materia: materia.id }">
+              <span class="row__main">
+                <span class="row__title">{{ materia.nome }}</span>
+              </span>
+              <span class="count" [attr.aria-label]="materia.topicos.length + ' tópicos'">{{ materia.topicos.length }}</span>
+              <app-icon name="chevron-right" />
+            </a>
+          </li>
+        } @empty {
+          <li class="empty">Nenhuma matéria ativa.</li>
+        }
+      </ul>
+    </article>
+
+    <article class="panel area-time" id="tempo-estudo" aria-labelledby="home-time-title">
+      @if (tempoResumo$ | async; as tempo) {
+        <header class="panel__head">
+          <h2 class="panel__title" id="home-time-title">Tempo de estudo</h2>
+          <a routerLink="/dashboard/tempo-estudado" class="btn btn--ghost btn--sm">Registrar tempo</a>
+        </header>
+        <div class="time">
+          <p class="time__total">
+            <strong>{{ formatarTempo(tempo.totalMinutos) }}</strong>
+            <span>neste mês</span>
+          </p>
+          <p class="time__top">
+            <span>Matéria com mais tempo</span>
+            <strong>{{ tempo.materiaPrincipal }} · {{ formatarTempo(tempo.minutosMateriaPrincipal) }}</strong>
+          </p>
+        </div>
+        <div class="bar bar--thick" role="progressbar" aria-valuemin="0" aria-valuemax="100" [attr.aria-valuenow]="tempo.percentualMateriaPrincipal" [attr.aria-label]="'Participação de ' + tempo.materiaPrincipal + ' no tempo do mês'">
+          <div class="bar__fill bar__fill--blue" [style.width.%]="tempo.percentualMateriaPrincipal"></div>
+        </div>
+      }
+    </article>
+  </div>
+</section>
+
+@if (editando) {
+  <app-dialog title="Editar tarefa" (close)="fecharEdicao()">
+    <form class="dialog-form" (ngSubmit)="salvarEdicao()">
+      <div class="field">
+        <label class="field__label" for="edit-title">Conteúdo</label>
+        <input id="edit-title" name="titulo" class="input" type="text" maxlength="150" [(ngModel)]="edicaoTitulo" required />
+      </div>
+      <div class="field">
+        <label class="field__label" for="edit-subject">Matéria</label>
+        <select id="edit-subject" name="materia" class="input" [(ngModel)]="edicaoMateriaId">
+          @for (materia of materiasAtivas$ | async; track materia.id) {
+            <option [ngValue]="materia.id">{{ materia.nome }}</option>
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label class="field__label" for="edit-date">Prazo</label>
+        <input id="edit-date" name="prazo" class="input" type="date" [(ngModel)]="edicaoPrazo" />
+      </div>
+      <div class="field">
+        <label class="field__label" for="edit-desc">Descrição</label>
+        <textarea id="edit-desc" name="descricao" class="input" maxlength="2000" [(ngModel)]="edicaoDescricao"></textarea>
+      </div>
+      <div class="dialog__actions dialog__actions--split">
+        <button type="button" class="btn btn--danger" (click)="excluirDaEdicao()"><app-icon name="trash" /> Excluir</button>
+        <button type="submit" class="btn btn--primary">Salvar alterações</button>
+      </div>
+    </form>
+  </app-dialog>
+}

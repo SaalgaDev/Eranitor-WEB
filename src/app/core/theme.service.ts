@@ -39,7 +39,6 @@ export class ThemeService {
     try {
       window.localStorage.setItem(STORAGE_KEY, next);
     } catch {
-      return;
     }
   }
 

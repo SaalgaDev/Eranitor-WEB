@@ -1,30 +1,28 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
-/**
- * Logo do Eranitor (wordmark + capelo de formatura).
- * `variant` controla a cor via CSS (a mesma marca é usada sobre
- * fundo navy e sobre fundo claro).
- */
+export type LogoKind = 'full' | 'wordmark' | 'icon';
+
+const SOURCES: Record<LogoKind, string> = {
+  full: 'assets/brand/eranitor-logo-navy.svg',
+  wordmark: 'assets/brand/eranitor-wordmark-navy.svg',
+  icon: 'assets/brand/eranitor-icon-navy.svg',
+};
+
 @Component({
   selector: 'app-logo',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [RouterLink, TranslatePipe],
   templateUrl: './logo.component.html',
   styleUrl: './logo.component.scss',
 })
 export class LogoComponent {
-  /** 'light' = marca clara para uso sobre fundo navy (padrão). 'dark' = marca escura para uso sobre fundo claro. */
-  @Input() variant: 'light' | 'dark' = 'light';
-  /** Se falso, mostra apenas o símbolo (uso em espaços reduzidos, ex. favicon-like). */
-  @Input() showWordmark = true;
-  /** Coloque a marca oficial em public/assets/images/logo.png. */
-  @Input() src = 'assets/images/logo.png';
+  @Input() kind: LogoKind = 'full';
+  @Input() size: 'default' | 'large' = 'default';
+  @Input() route: string | null = '/';
 
-  imageAvailable = true;
-
-  onImageError(): void {
-    this.imageAvailable = false;
+  get maskUrl(): string {
+    return `url("${SOURCES[this.kind]}")`;
   }
 }

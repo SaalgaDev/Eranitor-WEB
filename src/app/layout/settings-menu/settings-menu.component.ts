@@ -1,15 +1,16 @@
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, NavigationStart } from '@angular/router';
+import { Router, NavigationStart, RouterLink } from '@angular/router';
 import { filter } from 'rxjs';
 import { ThemeService } from '../../core/theme.service';
 import { I18nService, SiteLang } from '../../core/i18n.service';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-settings-menu',
   standalone: true,
-  imports: [CommonModule, TranslatePipe],
+  imports: [CommonModule, RouterLink, TranslatePipe],
   templateUrl: './settings-menu.component.html',
   styleUrl: './settings-menu.component.scss',
 })
@@ -25,6 +26,9 @@ export class SettingsMenuComponent {
   @ViewChild('trigger') trigger!: ElementRef<HTMLButtonElement>;
   @ViewChild('panel') panel?: ElementRef<HTMLElement>;
 
+  readonly auth = inject(AuthService);
+  user = this.auth.getCurrentUser();
+
   constructor(
     readonly theme: ThemeService,
     readonly i18n: I18nService,
@@ -34,6 +38,10 @@ export class SettingsMenuComponent {
     this.router.events
       .pipe(filter((e) => e instanceof NavigationStart))
       .subscribe(() => this.close(false));
+
+    this.auth.currentUser$.subscribe(u => {
+      this.user = u;
+    });
   }
 
   toggle(): void {
@@ -84,5 +92,11 @@ export class SettingsMenuComponent {
   @HostListener('document:keydown.escape')
   onEscape(): void {
     this.close(true);
+  }
+
+  logout(): void {
+    this.auth.logout();
+    this.close(true);
+    void this.router.navigate(['/auth/login']);
   }
 }

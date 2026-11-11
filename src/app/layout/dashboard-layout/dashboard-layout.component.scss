@@ -1,0 +1,12 @@
+.dash-main {
+  padding-bottom: 24px;
+}
+
+.dash-footnote {
+  width: min(var(--d-page-w), 100%);
+  margin-inline: auto;
+  padding: 8px var(--d-gutter) 120px;
+  font-size: 0.8125rem;
+  color: var(--d-ink-muted);
+  text-align: center;
+}

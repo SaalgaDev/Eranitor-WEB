@@ -22,12 +22,21 @@
   --danger-500: #ef4444;
   --star-400: #ffc857;
 
-  --font-display: "Poppins", "Segoe UI", system-ui, sans-serif;
+  --cloud-200: #d5d2cd;
+  --grey-500: #858585;
+  --btn-blue: #23447f;
+  --chart-green: #75d84f;
+  --chart-purple: #a57bef;
+  --chart-orange: #f2b45f;
+  --chart-blue: #477ff0;
+  --chart-yellow: #ffd954;
+
+  --font-display: "Montserrat", "Segoe UI", system-ui, sans-serif;
   --font-body: "Inter", "Segoe UI", system-ui, sans-serif;
 
-  --fs-display: clamp(2.75rem, 1.6rem + 5vw, 5.5rem);
-  --fs-900: clamp(2.4rem, 1.7rem + 3.2vw, 4.5rem);
-  --fs-800: clamp(1.9rem, 1.4rem + 2vw, 3rem);
+  --fs-display: clamp(2.4rem, 1.5rem + 3.6vw, 4.6rem);
+  --fs-900: clamp(2.1rem, 1.5rem + 2.6vw, 3.75rem);
+  --fs-800: clamp(1.75rem, 1.35rem + 1.7vw, 2.75rem);
   --fs-700: clamp(1.3rem, 1.1rem + 0.9vw, 1.75rem);
   --fs-600: clamp(1.125rem, 1.02rem + 0.4vw, 1.3rem);
   --fs-500: clamp(1rem, 0.96rem + 0.25vw, 1.125rem);
@@ -94,7 +103,6 @@
   --grad-card-light: linear-gradient(180deg, #ffffff 0%, #f1f8fd 100%);
   --grad-card-navy: linear-gradient(160deg, #16233a 0%, #0b1220 70%);
   --grad-cta: linear-gradient(180deg, #a8d2f0 0%, var(--ice-400) 60%, var(--ice-500) 100%);
-  --grad-text-ice: linear-gradient(92deg, var(--ice-200) 0%, var(--ice-400) 55%, var(--ice-500) 100%);
 
   --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-spring: cubic-bezier(0.34, 1.4, 0.4, 1);

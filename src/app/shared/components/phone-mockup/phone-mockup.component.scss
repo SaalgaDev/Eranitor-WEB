@@ -1,58 +1,99 @@
 :host {
   display: block;
-  --phone-w: clamp(16rem, 13rem + 13vw, 21.5rem);
+  --phone-w: clamp(15rem, 12rem + 12vw, 20rem);
 }
 
 .phone {
   width: var(--phone-w);
-  max-width: 76vw;
+  max-width: 72vw;
   margin-inline: auto;
-  filter: drop-shadow(0 1.5rem 1.5rem rgba(0, 0, 0, 0.45));
+  transform: perspective(1400px) rotateY(var(--px, 0deg)) rotateX(var(--py, 0deg));
+  transition: transform 600ms var(--ease-standard);
 }
 
-.phone--float {
+.phone--float .phone__body {
   animation: phone-float var(--dur-float) ease-in-out infinite;
 }
 
 @keyframes phone-float {
   0%, 100% { translate: 0 0; }
-  50% { translate: 0 -0.8rem; }
+  50% { translate: 0 -0.75rem; }
+}
+
+.phone__body {
+  --r: calc(var(--phone-w) * 0.16);
+  position: relative;
+  padding: calc(var(--phone-w) * 0.035);
+  border-radius: var(--r);
+  background: linear-gradient(145deg, var(--phone-frame-c) 0%, var(--phone-frame-a) 18%, var(--phone-frame-b) 52%, var(--phone-frame-a) 82%, var(--phone-frame-c) 100%);
+  box-shadow:
+    inset 0 0 0 1px var(--phone-edge),
+    inset 0 0 0 calc(var(--phone-w) * 0.012) var(--phone-bezel),
+    0 2.5rem 4rem -1rem rgba(0, 0, 0, 0.55),
+    0 0 5rem var(--phone-glow);
+}
+
+.phone__btn {
+  position: absolute;
+  width: 3px;
+  background: var(--phone-frame-a);
+  border-radius: 2px;
+}
+
+.phone__btn--action { left: -2px; top: 17%; height: 5%; }
+.phone__btn--vol-up { left: -2px; top: 25%; height: 9%; }
+.phone__btn--vol-down { left: -2px; top: 36%; height: 9%; }
+.phone__btn--power { right: -2px; top: 28%; height: 14%; }
+
+.phone__screen {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1081 / 1921;
+  border-radius: calc(var(--r) * 0.8);
+  background: var(--navy-950);
+  isolation: isolate;
 }
 
 .phone__image {
   display: block;
   width: 100%;
-  height: auto;
-  max-height: 78vh;
-  object-fit: contain;
-  object-position: center;
+  height: 100%;
+  object-fit: cover;
+}
+
+.phone__island {
+  position: absolute;
+  top: 1.6%;
+  left: 50%;
+  translate: -50% 0;
+  width: 30%;
+  aspect-ratio: 3.4;
+  background: #000;
+  border-radius: var(--radius-pill);
+}
+
+.phone__glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0.16) 0%, transparent 32%);
 }
 
 .phone__placeholder {
-  aspect-ratio: 9 / 19.5;
+  height: 100%;
   display: grid;
   place-content: center;
-  gap: 0.7rem;
   padding: 1.5rem;
   text-align: center;
-  color: var(--on-navy-100);
-  background: linear-gradient(145deg, var(--navy-700), var(--navy-950));
-  border: 2px solid rgba(149, 197, 235, 0.55);
-  border-radius: 2rem;
-  box-shadow: inset 0 0 0 0.45rem var(--navy-900);
-}
-
-.phone__placeholder span {
+  color: var(--on-navy-600);
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.1rem;
-}
-
-.phone__placeholder small {
-  color: var(--on-navy-600);
-  line-height: 1.4;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .phone--float { animation: none; }
+  .phone,
+  .phone--float .phone__body {
+    animation: none;
+    transform: none;
+  }
 }

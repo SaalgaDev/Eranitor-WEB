@@ -252,6 +252,103 @@
   opacity: 1;
 }
 
+.settings__row--divider {
+  border-top: 1px solid var(--border-soft);
+  margin-top: var(--space-2);
+  padding-top: var(--space-4);
+}
+
+.settings__account {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.settings__account-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.settings__account-name {
+  color: var(--settings-ink);
+  font-size: var(--fs-500);
+  font-weight: 600;
+  font-family: var(--font-display);
+}
+
+.settings__account-login {
+  color: var(--settings-ink);
+  font-size: var(--fs-300);
+  opacity: 0.8;
+}
+
+.settings__btn-logout {
+  width: 100%;
+  padding: var(--space-3);
+  background: transparent;
+  border: var(--stroke-md);
+  border-color: var(--hard-color);
+  color: var(--settings-ink);
+  border-radius: var(--radius-lg);
+  font-size: var(--fs-400);
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--dur-base) var(--ease-standard);
+}
+
+.settings__btn-logout:hover {
+  background: var(--danger-500);
+  border-color: var(--danger-500);
+  color: var(--white);
+}
+
+.settings__auth {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.settings__btn {
+  width: 100%;
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  font-size: var(--fs-400);
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: all var(--dur-base) var(--ease-standard);
+  border: var(--stroke-md);
+  border-color: var(--hard-color);
+}
+
+.settings__btn--outline {
+  background: transparent;
+  color: var(--settings-ink);
+}
+
+.settings__btn--outline:hover {
+  background: color-mix(in srgb, var(--ice-400) 12%, transparent);
+  border-color: var(--ice-400);
+}
+
+.settings__btn--primary {
+  background: var(--grad-cta);
+  color: var(--cta-ink);
+  border: none;
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.settings__btn--primary:hover {
+  filter: brightness(1.1);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--hard-color);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .settings__gear svg,
   .settings__panel,

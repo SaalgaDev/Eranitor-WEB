@@ -1,35 +1,32 @@
+:host {
+  display: inline-flex;
+}
+
 .logo {
+  --logo-h: 2.1rem;
   display: inline-flex;
   align-items: center;
-  min-height: 2.25rem;
+  color: inherit;
+  border-radius: var(--radius-sm);
 }
 
-.logo__image {
+.logo--full { --logo-ratio: 1055 / 219; }
+.logo--wordmark { --logo-ratio: 1055 / 153; --logo-h: var(--wordmark-h, 1.45rem); }
+.logo--icon { --logo-ratio: 1; --logo-h: 2.25rem; }
+
+.logo--large { --logo-h: 3rem; }
+.logo--large.logo--wordmark { --logo-h: var(--wordmark-h, 2.1rem); }
+
+.logo__mark {
   display: block;
-  width: auto;
-  height: 2rem;
-  max-width: min(11rem, 35vw);
-  object-fit: contain;
-  object-position: left center;
-}
-
-.logo__fallback {
-  color: var(--on-navy-100);
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-}
-
-.logo--dark .logo__fallback {
-  color: var(--navy-950);
-}
-
-:host-context(.footer) .logo__image {
-  height: 2.25rem;
-  max-width: 12.5rem;
+  height: var(--logo-h);
+  aspect-ratio: var(--logo-ratio);
+  background-color: currentColor;
+  -webkit-mask: var(--logo-src) center / contain no-repeat;
+  mask: var(--logo-src) center / contain no-repeat;
 }
 
 @media (max-width: 480px) {
-  .logo__image { height: 1.75rem; }
+  .logo--full { --logo-h: 1.8rem; }
+  .logo--full.logo--large { --logo-h: 2.6rem; }
 }

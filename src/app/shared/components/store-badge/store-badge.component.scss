@@ -15,8 +15,10 @@ a.badge:hover {
 }
 
 .badge--disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.35);
+  background: transparent;
+  cursor: default;
 }
 
 .badge__icon {
@@ -35,7 +37,7 @@ a.badge:hover {
   font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--on-navy-600);
+  color: var(--ice-200);
 }
 
 .badge__label {

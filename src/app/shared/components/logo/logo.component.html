@@ -1,7 +1,19 @@
-<a routerLink="/" class="logo" [class.logo--dark]="variant === 'dark'" aria-label="Eranitor — página inicial">
-  @if (imageAvailable) {
-    <img class="logo__image" [src]="src" alt="Eranitor" (error)="onImageError()" />
-  } @else {
-    <span class="logo__fallback" aria-hidden="true">ERANITOR</span>
-  }
-</a>
+@if (route !== null) {
+  <a
+    [routerLink]="route"
+    class="logo logo--{{ kind }}"
+    [class.logo--large]="size === 'large'"
+    [attr.aria-label]="'logo.home' | translate"
+  >
+    <span class="logo__mark" [style.--logo-src]="maskUrl" aria-hidden="true"></span>
+  </a>
+} @else {
+  <span
+    class="logo logo--{{ kind }}"
+    [class.logo--large]="size === 'large'"
+    role="img"
+    aria-label="Eranitor"
+  >
+    <span class="logo__mark" [style.--logo-src]="maskUrl" aria-hidden="true"></span>
+  </span>
+}

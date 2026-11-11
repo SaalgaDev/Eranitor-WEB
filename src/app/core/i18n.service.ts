@@ -39,7 +39,6 @@ export class I18nService {
       try {
         window.localStorage.setItem(STORAGE_KEY, next);
       } catch {
-        return;
       }
     }
     this.announcement.set(dict['settings.announce'] ?? '');
@@ -59,7 +58,7 @@ export class I18nService {
       contato: 'contact',
       baixar: 'download',
     };
-    const name = map[section] ?? (section === 'home' ? 'home' : 'home');
+    const name = map[section] ?? 'home';
     const title = this.t(`meta.${name}.title`);
     const desc = this.t(`meta.${name}.description`);
     if (title && title !== `meta.${name}.title`) this.title.setTitle(title);

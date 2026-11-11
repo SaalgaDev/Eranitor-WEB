@@ -1,6 +1,6 @@
 <header class="header" [class.header--scrolled]="scrolled">
   <div class="container container--wide header__float">
-    <app-logo />
+    <app-logo class="header__logo" />
     <nav
       id="primary-nav"
       class="header__nav"
@@ -21,18 +21,42 @@
             </a>
           </li>
         }
+        @if (user) {
+          <li>
+            <a
+              routerLink="/dashboard"
+              (click)="closeMenu()"
+              class="header__pill header__pill--cta"
+            >
+              {{ 'nav.dashboard' | translate }}
+            </a>
+          </li>
+        } @else {
+          <li>
+            <a
+              routerLink="/auth/login"
+              routerLinkActive="is-active"
+              (click)="closeMenu()"
+              class="header__pill"
+            >
+              {{ 'nav.signin' | translate }}
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/baixar"
+              routerLinkActive="is-active"
+              (click)="closeMenu()"
+              class="header__pill header__pill--cta"
+            >
+              {{ 'nav.download' | translate }}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 4v12M6 12l6 6 6-6M5 21h14" />
+              </svg>
+            </a>
+          </li>
+        }
       </ul>
-      <a
-        routerLink="/baixar"
-        routerLinkActive="is-active"
-        (click)="closeMenu()"
-        class="header__pill header__pill--cta"
-      >
-        {{ 'nav.download' | translate }}
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 4v12M6 12l6 6 6-6M5 21h14" />
-        </svg>
-      </a>
     </nav>
     <div class="header__controls">
       <app-settings-menu />

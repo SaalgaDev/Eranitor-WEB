@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/shared/components/store-badge/store-badge.component.scss"],
-  "sourcesContent": [".badge {\n  display: inline-flex;\n  align-items: center;\n  gap: var(--space-3);\n  padding: 0.65rem 1.25rem;\n  border-radius: var(--radius-md);\n  background: var(--navy-800);\n  border: var(--stroke-md);\n  color: var(--white);\n  transition: transform var(--dur-fast) var(--ease-standard);\n}\n\na.badge:hover {\n  transform: translateY(-2px);\n}\n\n.badge--disabled {\n  opacity: 0.55;\n  cursor: not-allowed;\n}\n\n.badge__icon {\n  width: 26px;\n  height: 26px;\n  flex-shrink: 0;\n}\n\n.badge__text {\n  display: flex;\n  flex-direction: column;\n  line-height: 1.2;\n}\n\n.badge__sub {\n  font-size: 0.65rem;\n  text-transform: uppercase;\n  letter-spacing: 0.04em;\n  color: var(--on-navy-600);\n}\n\n.badge__label {\n  font-family: var(--font-display);\n  font-weight: 700;\n  font-size: 0.95rem;\n}\n"],
-  "mappings": ";AAAA,CAAA;AACE,WAAA;AACA,eAAA;AACA,OAAA,IAAA;AACA,WAAA,QAAA;AACA,iBAAA,IAAA;AACA,cAAA,IAAA;AACA,UAAA,IAAA;AACA,SAAA,IAAA;AACA,cAAA,UAAA,IAAA,YAAA,IAAA;;AAGF,CAAA,CAZA,KAYA;AACE,aAAA,WAAA;;AAGF,CAAA;AACE,WAAA;AACA,UAAA;;AAGF,CAAA;AACE,SAAA;AACA,UAAA;AACA,eAAA;;AAGF,CAAA;AACE,WAAA;AACA,kBAAA;AACA,eAAA;;AAGF,CAAA;AACE,aAAA;AACA,kBAAA;AACA,kBAAA;AACA,SAAA,IAAA;;AAGF,CAAA;AACE,eAAA,IAAA;AACA,eAAA;AACA,aAAA;;",
-  "names": []
-}

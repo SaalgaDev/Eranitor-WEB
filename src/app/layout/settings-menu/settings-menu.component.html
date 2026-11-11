@@ -7,7 +7,7 @@
     (click)="toggle()"
     [attr.aria-expanded]="open"
     aria-controls="settings-panel"
-    [attr.aria-label]="('settings.open' | translate) + ' / ' + ('settings.title' | translate)"
+    [attr.aria-label]="(open ? 'settings.close' : 'settings.open') | translate"
   >
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <circle cx="12" cy="12" r="3.2" />
@@ -71,6 +71,42 @@
           </button>
         }
       </div>
+    </div>
+
+    <div class="settings__row settings__row--col settings__row--divider">
+      <span class="settings__label">{{ 'settings.account' | translate }}</span>
+      @if (user) {
+        <div class="settings__account">
+          <div class="settings__account-info">
+            <div class="settings__account-name">{{ user.nome }}</div>
+            <div class="settings__account-login">{{ user.login }}</div>
+          </div>
+          <button
+            type="button"
+            class="settings__btn-logout"
+            (click)="logout()"
+          >
+            {{ 'nav.logout' | translate }}
+          </button>
+        </div>
+      } @else {
+        <div class="settings__auth">
+          <a
+            routerLink="/auth/login"
+            class="settings__btn settings__btn--outline"
+            (click)="close(true)"
+          >
+            {{ 'nav.signin' | translate }}
+          </a>
+          <a
+            routerLink="/auth/cadastro"
+            class="settings__btn settings__btn--primary"
+            (click)="close(true)"
+          >
+            {{ 'nav.signup' | translate }}
+          </a>
+        </div>
+      }
     </div>
     </div>
   </section>

@@ -1,5 +1,4 @@
 <app-page-hero
-  eyebrowKey="page.about.eyebrow"
   titleKey="page.about.title"
   leadKey="page.about.lead"
 />
@@ -18,7 +17,6 @@
 <section class="section">
   <div class="container missao__grid">
     <div class="section-head">
-      <span class="eyebrow eyebrow--on-light" appReveal>{{ 'page.about.missionEyebrow' | translate }}</span>
       <h2 class="section-head__title" appReveal [revealDelay]="80">{{ 'page.about.missionTitle' | translate }}</h2>
     </div>
     <div class="missao__text" appReveal [revealDelay]="140">
@@ -32,7 +30,6 @@
   <div class="container">
     <div class="origin__grid">
       <div class="origin__sticky">
-        <span class="eyebrow eyebrow--on-light" appReveal>{{ 'page.about.originEyebrow' | translate }}</span>
         <h2 class="section-head__title" id="origem-title" appReveal [revealDelay]="80">{{ 'page.about.originTitle' | translate }}</h2>
         <p class="origin__lead" appReveal [revealDelay]="140">{{ 'page.about.originLead' | translate }}</p>
         <blockquote class="origin__quote" appReveal [revealDelay]="200">
@@ -55,7 +52,7 @@
         <div class="solution" appReveal>
           <h3>{{ 'page.about.solutionTitle' | translate }}</h3>
           <p>{{ 'page.about.solutionText' | translate }}</p>
-          <ul class="principles" aria-label="Principles">
+          <ul class="principles">
             @for (i of signalIndexes; track i) {
               <li class="principles__chip">{{ 'page.about.principle.' + i | translate }}</li>
             }
@@ -63,7 +60,7 @@
         </div>
       </div>
     </div>
-    <dl class="stats" aria-label="Stats">
+    <dl class="stats">
       @for (i of statIndexes; track i) {
         <div class="stats__item" appReveal [revealDelay]="i * 80">
           <dt class="sr-only">{{ 'page.about.stat.' + i + '.label' | translate }}</dt>
@@ -78,7 +75,6 @@
 <section class="section section--navy">
   <div class="container container--wide">
     <div class="section-head section-head--center">
-      <span class="eyebrow" appReveal>{{ 'page.about.howEyebrow' | translate }}</span>
       <h2 class="section-head__title" appReveal [revealDelay]="80">{{ 'page.about.howTitle' | translate }}</h2>
     </div>
     <ol class="cycle-detail">
@@ -98,7 +94,6 @@
 <section class="section" id="publico" aria-labelledby="publico-title">
   <div class="container container--wide">
     <div class="section-head">
-      <span class="eyebrow eyebrow--on-light" appReveal>{{ 'page.about.audienceEyebrow' | translate }}</span>
       <h2 class="section-head__title" id="publico-title" appReveal [revealDelay]="80">{{ 'page.about.audienceTitle' | translate }}</h2>
       <p class="section-head__lead" appReveal [revealDelay]="140">{{ 'page.about.audienceLead' | translate }}</p>
     </div>
@@ -121,7 +116,6 @@
 <section class="section section--alt">
   <div class="container container--wide">
     <div class="section-head section-head--center">
-      <span class="eyebrow eyebrow--on-light" appReveal>{{ 'page.about.valuesEyebrow' | translate }}</span>
       <h2 class="section-head__title" appReveal [revealDelay]="80">{{ 'page.about.valuesTitle' | translate }}</h2>
     </div>
     <div class="values-grid">
@@ -138,7 +132,6 @@
 <section class="section" id="diferenciais" aria-labelledby="diff-title">
   <div class="container">
     <div class="section-head section-head--center">
-      <span class="eyebrow eyebrow--on-light" appReveal>{{ 'page.about.diffEyebrow' | translate }}</span>
       <h2 class="section-head__title" id="diff-title" appReveal [revealDelay]="80">{{ 'page.about.diffTitle' | translate }}</h2>
       <p class="section-head__lead" appReveal [revealDelay]="140">{{ 'page.about.diffLead' | translate }}</p>
     </div>
@@ -175,7 +168,6 @@
 <section class="section section--alt" id="jornada" aria-labelledby="jornada-title">
   <div class="container journey__grid">
     <div>
-      <span class="eyebrow eyebrow--on-light" appReveal>{{ 'page.about.journeyEyebrow' | translate }}</span>
       <h2 class="section-head__title" id="jornada-title" appReveal [revealDelay]="80">{{ 'page.about.journeyTitle' | translate }}</h2>
       <p class="section-head__lead" appReveal [revealDelay]="140">{{ 'page.about.journeyLead' | translate }}</p>
       <div class="future" appReveal [revealDelay]="200">

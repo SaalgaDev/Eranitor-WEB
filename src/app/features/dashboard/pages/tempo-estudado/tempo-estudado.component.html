@@ -1,0 +1,102 @@
+<section class="dash-page">
+  <header class="dash-head">
+    <div>
+      <h1 class="dash-head__title">Tempo estudado</h1>
+      <p class="dash-head__lede">Registre quanto você estudou e veja como o tempo se divide entre as matérias.</p>
+    </div>
+    <span class="tag"><span class="dot" aria-hidden="true"></span>{{ rotuloMes }}</span>
+  </header>
+
+  <div class="time-layout">
+    <div class="time-side">
+      @if (resumo$ | async; as resumo) {
+        <article class="panel total" aria-label="Resumo do mês">
+          <p class="total__label">Total no mês</p>
+          <p class="total__value">{{ formatar(resumo.totalMinutos) }}</p>
+          <p class="total__top">
+            Mais tempo em <strong>{{ resumo.materiaPrincipal }}</strong>
+            ({{ resumo.percentualMateriaPrincipal }}%)
+          </p>
+        </article>
+      }
+
+      <article class="panel" aria-labelledby="register-title">
+        <header class="panel__head">
+          <h2 class="panel__title" id="register-title">Registrar tempo</h2>
+        </header>
+        <form class="stack" (ngSubmit)="registrar()">
+          <div class="field">
+            <label class="field__label" for="time-subject">Matéria</label>
+            <select id="time-subject" name="materia" class="input" [(ngModel)]="materiaId">
+              @for (materia of materiasAtivas$ | async; track materia.id) {
+                <option [ngValue]="materia.id">{{ materia.nome }}</option>
+              }
+            </select>
+          </div>
+
+          <fieldset class="field kinds">
+            <legend class="field__label">Tipo de estudo</legend>
+            <div class="kinds__list">
+              @for (t of tipos; track t.id) {
+                <label class="kinds__item">
+                  <input type="radio" name="tipo" [value]="t.id" [(ngModel)]="tipo" />
+                  <span class="dot" [style.background]="t.cor" aria-hidden="true"></span>
+                  {{ t.rotulo }}
+                </label>
+              }
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label class="field__label" for="time-minutes">Duração (minutos)</label>
+            <input id="time-minutes" name="minutos" class="input" type="number" inputmode="numeric" min="1" max="1440" step="1" [(ngModel)]="minutos" placeholder="Ex.: 45" required />
+            <span class="field__hint">Somado ao total do mês da matéria escolhida.</span>
+          </div>
+
+          @if (erro) { <p class="form-error" role="alert">{{ erro }}</p> }
+          <button class="btn btn--primary" type="submit">Registrar tempo</button>
+        </form>
+        @if (feedback) { <p class="feedback" role="status">{{ feedback }}</p> }
+      </article>
+    </div>
+
+    <article class="panel" aria-labelledby="breakdown-title">
+      <header class="panel__head">
+        <div>
+          <h2 class="panel__title" id="breakdown-title">Por matéria</h2>
+          <p class="panel__sub">{{ rotuloMes }}</p>
+        </div>
+      </header>
+      <ul class="legend" aria-hidden="true">
+        @for (t of tipos; track t.id) {
+          <li><span class="dot" [style.background]="t.cor"></span>{{ t.curto }}</li>
+        }
+      </ul>
+
+      @if (registros$ | async; as registros) {
+        <ul class="subjects">
+          @for (materia of materiasAtivas$ | async; track materia.id) {
+            <li class="subject">
+              <div class="subject__head">
+                <h3>{{ materia.nome }}</h3>
+                <strong>{{ formatar(total(registros, materia.id)) }}</strong>
+              </div>
+              <div class="bar subject__bar" role="img" [attr.aria-label]="descrever(registros, materia.id, materia.nome)">
+                @for (t of tipos; track t.id) {
+                  <span class="subject__seg" [style.flex-grow]="minutosPorTipo(registros, materia.id, t.id)" [style.background]="t.cor"></span>
+                }
+              </div>
+              <p class="subject__detail">
+                @for (t of tipos; track t.id) {
+                  <span>{{ t.curto }} <b>{{ formatar(minutosPorTipo(registros, materia.id, t.id)) }}</b></span>
+                }
+              </p>
+            </li>
+          } @empty {
+            <li class="empty">Cadastre uma matéria para começar a registrar seu tempo.</li>
+          }
+        </ul>
+      }
+    </article>
+  </div>
+</section>

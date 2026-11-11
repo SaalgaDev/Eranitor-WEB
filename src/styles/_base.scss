@@ -5,6 +5,9 @@
 }
 
 html {
+  color-scheme: dark;
+  accent-color: var(--ice-400);
+  scrollbar-color: var(--ice-500) var(--bg);
   scroll-behavior: smooth;
   font-size: 100%;
   -webkit-text-size-adjust: 100%;
@@ -40,6 +43,16 @@ html {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  scrollbar-color: var(--navy-800) var(--bg);
+}
+
+input,
+textarea {
+  caret-color: var(--ice-500);
 }
 
 body {
@@ -159,27 +172,6 @@ button {
   border: 0;
 }
 
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-family: var(--font-display);
-  font-size: var(--fs-300);
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ice-500);
-}
-
-.section--navy .eyebrow,
-.eyebrow--on-navy {
-  color: var(--ice-400);
-}
-
-.eyebrow--on-light {
-  color: var(--text);
-}
-
 .section {
   padding-block: var(--section-pad-y);
   position: relative;
@@ -211,7 +203,6 @@ button {
 
 .section-head__title {
   font-size: var(--fs-800);
-  margin-top: var(--space-3);
   letter-spacing: -0.02em;
 }
 
@@ -227,41 +218,23 @@ button {
 }
 
 .reveal {
-  opacity: 0;
-  transform: translateY(22px);
-  transition: opacity var(--dur-slow) var(--ease-standard), transform var(--dur-slow) var(--ease-standard);
+  transition: opacity var(--dur-hero) var(--ease-standard), transform var(--dur-hero) var(--ease-standard);
   transition-delay: var(--reveal-delay, 0ms);
-  will-change: opacity, transform;
 }
 
-.reveal.is-visible {
-  opacity: 1;
-  transform: none;
+:is(.hero, .page-hero) .reveal:not(.is-visible) {
+  opacity: 0;
+  transform: translateY(18px);
 }
 
-.reveal--left {
-  transform: translateX(-26px);
-}
-
-.reveal--right {
-  transform: translateX(26px);
-}
-
-.reveal--scale {
+:is(.hero, .page-hero) .reveal--scale:not(.is-visible) {
   transform: scale(0.96) translateY(12px);
 }
 
-.reveal.is-visible.reveal--left,
-.reveal.is-visible.reveal--right,
-.reveal.is-visible.reveal--scale {
-  transform: none;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .reveal {
+  :is(.hero, .page-hero) .reveal:not(.is-visible) {
     opacity: 1;
     transform: none;
-    transition: none;
   }
 }
 
@@ -273,13 +246,6 @@ button {
   background-size: 26px 26px;
   mask-image: radial-gradient(70% 65% at 50% 38%, black 30%, transparent 78%);
   -webkit-mask-image: radial-gradient(70% 65% at 50% 38%, black 30%, transparent 78%);
-}
-
-.glass-card {
-  background: var(--glass-bg);
-  border: var(--stroke-glass);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
 }
 
 .cta {
