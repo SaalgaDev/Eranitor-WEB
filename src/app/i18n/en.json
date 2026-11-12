@@ -262,7 +262,7 @@
   "auth.error.school": "Enter your school (at least 3 letters).",
   "auth.error.loginFailed": "Incorrect email/username or password. Check your details and try again.",
   "auth.error.registerFailed": "Couldn’t create the account right now. Try again in a moment.",
-  "auth.demoNote": "The same account works on the Eranitor website and app.",
+  "auth.demoNote": "Your website account will also work in the Eranitor app.",
   "auth.error.emailTaken": "This email already has an account. Sign in or use another email.",
   "auth.error.server": "We couldn’t reach the Eranitor server. Check your connection and try again in a few seconds.",
   "auth.error.sessionExpired": "Your session expired. Sign in again to continue."

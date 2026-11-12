@@ -262,7 +262,7 @@
   "auth.error.school": "Introduce tu institución educativa (mínimo 3 letras).",
   "auth.error.loginFailed": "Correo/usuario o contraseña incorrectos. Revisa los datos e inténtalo de nuevo.",
   "auth.error.registerFailed": "No se pudo crear la cuenta ahora. Inténtalo de nuevo en un momento.",
-  "auth.demoNote": "La misma cuenta funciona en el sitio y en la app de Eranitor.",
+  "auth.demoNote": "Tu cuenta del sitio también funcionará en la app de Eranitor.",
   "auth.error.emailTaken": "Este correo ya tiene una cuenta. Inicia sesión o usa otro correo.",
   "auth.error.server": "No pudimos conectar con el servidor de Eranitor. Revisa tu conexión e inténtalo en unos segundos.",
   "auth.error.sessionExpired": "Tu sesión expiró. Inicia sesión de nuevo para continuar."
