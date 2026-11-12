@@ -4,6 +4,9 @@
 </div>
 <p class="dash-footnote">Seus dados ficam salvos na sua conta Eranitor e aparecem também no app.</p>
 
+<app-cronometro-mini />
+@if (cronometro.telaCheia()) { <app-cronometro-tela /> }
+
 <div class="dash-toast-area" role="alert" aria-live="assertive">
   @if (aviso()) {
     <div class="dash-toast">

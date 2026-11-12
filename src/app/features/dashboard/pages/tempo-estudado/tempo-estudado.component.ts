@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import { DashboardService, RegistroTempo, TipoEstudo } from '../../services/dashboard.service';
+import { CronometroComponent } from '../../components/cronometro/cronometro.component';
 
 const CAMPO: Record<TipoEstudo, 'minutosAtividade' | 'minutosVideo' | 'minutosApostila'> = {
   atividade: 'minutosAtividade',
@@ -14,7 +15,7 @@ const CAMPO: Record<TipoEstudo, 'minutosAtividade' | 'minutosVideo' | 'minutosAp
 @Component({
   selector: 'app-tempo-estudado',
   standalone: true,
-  imports: [AsyncPipe, FormsModule],
+  imports: [AsyncPipe, FormsModule, CronometroComponent],
   templateUrl: './tempo-estudado.component.html',
   styleUrl: './tempo-estudado.component.scss',
 })

@@ -2,7 +2,8 @@ import { Component, Input } from '@angular/core';
 
 export type DashIcon =
   | 'plus' | 'check' | 'close' | 'edit' | 'trash' | 'archive'
-  | 'chevron-left' | 'chevron-right' | 'back' | 'user' | 'calendar' | 'book' | 'logout';
+  | 'chevron-left' | 'chevron-right' | 'back' | 'user' | 'calendar' | 'book' | 'logout'
+  | 'play' | 'pause' | 'skip' | 'stop' | 'maximize' | 'minimize' | 'timer';
 
 @Component({
   selector: 'app-icon',
@@ -23,6 +24,13 @@ export type DashIcon =
         @case ('calendar') { <rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 10h18" /> }
         @case ('book') { <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14Z" /> }
         @case ('logout') { <path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10" /> }
+        @case ('play') { <path d="M7 4.5v15l12-7.5-12-7.5Z" /> }
+        @case ('pause') { <path d="M8 5v14M16 5v14" /> }
+        @case ('skip') { <path d="M5 5v14l10-7L5 5ZM19 5v14" /> }
+        @case ('stop') { <rect x="6" y="6" width="12" height="12" rx="2" /> }
+        @case ('maximize') { <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" /> }
+        @case ('minimize') { <path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" /> }
+        @case ('timer') { <circle cx="12" cy="13" r="8" /><path d="M12 9v4l2.5 2.5M9 2h6" /> }
       }
     </svg>
   `,

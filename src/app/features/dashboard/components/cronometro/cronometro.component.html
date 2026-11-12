@@ -1,0 +1,106 @@
+<article class="panel crono" aria-labelledby="crono-title">
+  <header class="panel__head">
+    <div>
+      <h2 class="panel__title" id="crono-title">Cronômetro</h2>
+      <p class="panel__sub">Estude com o relógio e registre no final.</p>
+    </div>
+    <button type="button" class="icon-btn icon-btn--quiet" (click)="c.abrirTelaCheia()" aria-label="Abrir em tela cheia (modo foco)" title="Tela cheia">
+      <app-icon name="maximize" />
+    </button>
+  </header>
+
+  @if (c.pendenteMin() === null) {
+    <div class="crono__modes" role="group" aria-label="Modo do cronômetro">
+      <button type="button" class="crono__mode" [attr.aria-pressed]="c.modo() === 'pomodoro'" [disabled]="!parado()" (click)="c.definirModo('pomodoro')">Pomodoro</button>
+      <button type="button" class="crono__mode" [attr.aria-pressed]="c.modo() === 'livre'" [disabled]="!parado()" (click)="c.definirModo('livre')">Livre</button>
+    </div>
+
+    <div class="crono__face" [class.crono__face--pausa]="c.modo() === 'pomodoro' && c.fase() !== 'foco'">
+      <span class="crono__phase">{{ c.rotuloFase() }}@if (c.modo() === 'pomodoro') { · {{ c.focosConcluidos() }}/{{ c.crono().config.ciclos }} focos }</span>
+      <span class="crono__time" role="timer" aria-live="off">{{ relogio() }}</span>
+      @if (c.modo() === 'pomodoro') {
+        <span class="crono__studied">Estudado: <b>{{ estudado() }}</b></span>
+        <div class="bar crono__bar" aria-hidden="true"><div class="bar__fill" [style.width.%]="c.progressoFase() * 100"></div></div>
+      }
+    </div>
+
+    <div class="crono__row">
+      <div class="field">
+        <label class="field__label" for="crono-subject">Matéria</label>
+        <select id="crono-subject" class="input" [ngModel]="c.materiaId()" (ngModelChange)="c.escolherMateria($event)">
+          @for (m of materias(); track m.id) { <option [ngValue]="m.id">{{ m.nome }}</option> }
+        </select>
+      </div>
+      <div class="field">
+        <label class="field__label" for="crono-kind">Tipo</label>
+        <select id="crono-kind" class="input" [ngModel]="c.tipo()" (ngModelChange)="c.escolherTipo($event)">
+          @for (t of tipos; track t.id) { <option [ngValue]="t.id">{{ t.rotulo }}</option> }
+        </select>
+      </div>
+    </div>
+
+    <div class="crono__controls">
+      @if (c.rodando()) {
+        <button type="button" class="btn btn--primary" (click)="c.pausar()"><app-icon name="pause" /> Pausar</button>
+      } @else {
+        <button type="button" class="btn btn--primary" (click)="iniciar()"><app-icon name="play" /> {{ parado() ? 'Iniciar' : 'Retomar' }}</button>
+      }
+      @if (c.modo() === 'pomodoro' && !parado()) {
+        <button type="button" class="btn btn--ghost" (click)="c.pularFase()"><app-icon name="skip" /> Pular fase</button>
+      }
+      @if (!parado()) {
+        <button type="button" class="btn btn--ghost" (click)="c.finalizar()"><app-icon name="stop" /> Finalizar</button>
+      }
+    </div>
+
+    @if (c.modo() === 'pomodoro' && parado()) {
+      <details class="crono__config">
+        <summary>Ajustar tempos ({{ c.crono().config.focoMin }}/{{ c.crono().config.pausaMin }}/{{ c.crono().config.pausaLongaMin }} min)</summary>
+        <div class="crono__config-grid">
+          <label class="field"><span class="field__label">Foco (min)</span>
+            <input class="input" type="number" min="1" max="180" [ngModel]="c.crono().config.focoMin" (change)="c.definirConfig({ focoMin: $any($event.target).valueAsNumber })" /></label>
+          <label class="field"><span class="field__label">Pausa curta</span>
+            <input class="input" type="number" min="1" max="60" [ngModel]="c.crono().config.pausaMin" (change)="c.definirConfig({ pausaMin: $any($event.target).valueAsNumber })" /></label>
+          <label class="field"><span class="field__label">Pausa longa</span>
+            <input class="input" type="number" min="1" max="120" [ngModel]="c.crono().config.pausaLongaMin" (change)="c.definirConfig({ pausaLongaMin: $any($event.target).valueAsNumber })" /></label>
+          <label class="field"><span class="field__label">Focos até a longa</span>
+            <input class="input" type="number" min="1" max="12" [ngModel]="c.crono().config.ciclos" (change)="c.definirConfig({ ciclos: $any($event.target).valueAsNumber })" /></label>
+        </div>
+      </details>
+    }
+  } @else {
+    <form class="crono__confirm" (ngSubmit)="confirmar()">
+      @if (c.pendenteMin()! >= 1) {
+        <p class="crono__confirm-lede">Sessão finalizada. Confira antes de registrar:</p>
+        <div class="crono__row">
+          <div class="field">
+            <label class="field__label" for="crono-confirm-min">Minutos estudados</label>
+            <input id="crono-confirm-min" name="minutos" class="input" type="number" min="1" max="1440" [(ngModel)]="minutosConfirmar" />
+          </div>
+          <div class="field">
+            <label class="field__label" for="crono-confirm-subject">Matéria</label>
+            <select id="crono-confirm-subject" name="materia" class="input" [ngModel]="c.materiaId()" (ngModelChange)="c.escolherMateria($event)">
+              @for (m of materias(); track m.id) { <option [ngValue]="m.id">{{ m.nome }}</option> }
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field__label" for="crono-confirm-kind">Tipo</label>
+          <select id="crono-confirm-kind" name="tipo" class="input" [ngModel]="c.tipo()" (ngModelChange)="c.escolherTipo($event)">
+            @for (t of tipos; track t.id) { <option [ngValue]="t.id">{{ t.rotulo }}</option> }
+          </select>
+        </div>
+        <div class="crono__controls">
+          <button type="submit" class="btn btn--primary"><app-icon name="check" /> Registrar tempo</button>
+          <button type="button" class="btn btn--ghost" (click)="descartar()">Descartar</button>
+        </div>
+      } @else {
+        <p class="crono__confirm-lede">A sessão teve menos de 1 minuto de estudo, então não há o que registrar.</p>
+        <button type="button" class="btn btn--primary" (click)="descartar()">Ok</button>
+      }
+    </form>
+  }
+
+  @if (erro) { <p class="form-error" role="alert">{{ erro }}</p> }
+  @if (feedback) { <p class="feedback" role="status">{{ feedback }}</p> }
+</article>

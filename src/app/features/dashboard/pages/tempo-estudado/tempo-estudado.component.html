@@ -2,7 +2,7 @@
   <header class="dash-head">
     <div>
       <h1 class="dash-head__title">Tempo estudado</h1>
-      <p class="dash-head__lede">Registre quanto você estudou e veja como o tempo se divide entre as matérias.</p>
+      <p class="dash-head__lede">Use o cronômetro (livre ou pomodoro) ou registre manualmente, e veja como o tempo se divide entre as matérias.</p>
     </div>
     <span class="tag"><span class="dot" aria-hidden="true"></span>{{ rotuloMes }}</span>
   </header>
@@ -20,9 +20,11 @@
         </article>
       }
 
+      <app-cronometro />
+
       <article class="panel" aria-labelledby="register-title">
         <header class="panel__head">
-          <h2 class="panel__title" id="register-title">Registrar tempo</h2>
+          <h2 class="panel__title" id="register-title">Registrar manualmente</h2>
         </header>
         <form class="stack" (ngSubmit)="registrar()">
           <div class="field">
