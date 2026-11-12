@@ -1,8 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterOutlet } from '@angular/router';
 import { NavSidebarComponent } from '../../features/dashboard/components/nav-sidebar/nav-sidebar.component';
 import { DialogComponent } from '../../features/dashboard/components/dialog/dialog.component';
 import { ConfirmService } from '../../features/dashboard/services/confirm.service';
+import { DashboardService } from '../../features/dashboard/services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard-layout',
@@ -14,4 +16,19 @@ import { ConfirmService } from '../../features/dashboard/services/confirm.servic
 })
 export class DashboardLayoutComponent {
   readonly confirm = inject(ConfirmService);
+  readonly aviso = signal('');
+  private timer?: ReturnType<typeof setTimeout>;
+
+  constructor() {
+    inject(DashboardService).avisos$.pipe(takeUntilDestroyed()).subscribe((mensagem) => {
+      this.aviso.set(mensagem);
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => this.aviso.set(''), 7000);
+    });
+  }
+
+  fecharAviso(): void {
+    clearTimeout(this.timer);
+    this.aviso.set('');
+  }
 }

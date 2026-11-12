@@ -14,10 +14,15 @@
         <span class="count">{{ ativas.length }}</span>
       </header>
 
-      <form class="inline-add" (ngSubmit)="adicionarMateria()">
-        <label class="sr-only" for="new-subject">Nova matéria</label>
-        <input id="new-subject" name="novaMateria" class="input" type="text" maxlength="100" [(ngModel)]="novaMateria" placeholder="Nova matéria" required />
-        <button type="submit" class="icon-btn icon-btn--accent" aria-label="Adicionar matéria"><app-icon name="plus" /></button>
+      <form class="new-subject" (ngSubmit)="adicionarMateria()">
+        <div class="inline-add">
+          <label class="sr-only" for="new-subject">Nova matéria</label>
+          <input id="new-subject" name="novaMateria" class="input" type="text" maxlength="100" [(ngModel)]="novaMateria" placeholder="Nova matéria" required />
+          <button type="submit" class="icon-btn icon-btn--accent" aria-label="Adicionar matéria"><app-icon name="plus" /></button>
+        </div>
+        @if (novaMateria.trim()) {
+          <app-dificuldade legenda="Dificuldade da nova matéria" [(valor)]="novaDificuldade" />
+        }
       </form>
 
       <ul class="row-list scroll-list list" aria-label="Selecionar matéria">
@@ -26,7 +31,7 @@
             <button type="button" class="row select-row" [class.row--selected]="m.id === materiaId" [attr.aria-pressed]="m.id === materiaId" (click)="selecionarMateria(m)">
               <span class="row__main">
                 <span class="row__title">{{ m.nome }}</span>
-                <span class="row__meta">{{ concluidos(m) }} de {{ m.topicos.length }} tópicos concluídos</span>
+                <span class="row__meta">{{ rotuloDificuldade(m.dificuldade) }} · {{ concluidos(m) }} de {{ m.topicos.length }} tópicos concluídos</span>
               </span>
               <app-icon name="chevron-right" />
             </button>
@@ -45,6 +50,11 @@
               <button type="submit" class="icon-btn icon-btn--accent" aria-label="Salvar nome da matéria"><app-icon name="check" /></button>
             </div>
           </div>
+          <app-dificuldade
+            [valor]="materia.dificuldade"
+            (valorChange)="definirDificuldade($event)"
+            dica="Matérias mais difíceis sobem na prioridade das tarefas."
+          />
           <button type="button" class="btn btn--danger btn--sm align-start" (click)="arquivarMateria()">
             <app-icon name="archive" /> Arquivar matéria
           </button>

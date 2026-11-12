@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DashboardMockService, EventoAgenda, TipoEventoAgenda } from '../../services/dashboard-mock.service';
+import { DashboardService, EventoAgenda, TipoEventoAgenda } from '../../services/dashboard.service';
 import { ConfirmService } from '../../services/confirm.service';
 import { IconComponent } from '../../components/icon/icon.component';
 import { DialogComponent } from '../../components/dialog/dialog.component';
@@ -24,7 +24,7 @@ const deISO = (iso: string): Date => {
   styleUrl: './agenda.component.scss',
 })
 export class AgendaComponent {
-  readonly mock = inject(DashboardMockService);
+  readonly mock = inject(DashboardService);
   private readonly confirm = inject(ConfirmService);
 
   readonly eventos$ = this.mock.getEventos();

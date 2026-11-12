@@ -1,11 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
-import { DashboardMockService, StatusTarefa, Tarefa } from '../../services/dashboard-mock.service';
+import { DashboardService, StatusTarefa, Tarefa } from '../../services/dashboard.service';
 import { ConfirmService } from '../../services/confirm.service';
 import { IconComponent } from '../../components/icon/icon.component';
 import { DialogComponent } from '../../components/dialog/dialog.component';
+import { detalharConta, explicarPrioridade } from '../../services/prioridade';
 
 type Filtro = 'todas' | StatusTarefa;
 
@@ -17,7 +19,7 @@ type Filtro = 'todas' | StatusTarefa;
   styleUrl: './tarefas.component.scss',
 })
 export class TarefasComponent {
-  readonly mock = inject(DashboardMockService);
+  readonly mock = inject(DashboardService);
   private readonly confirm = inject(ConfirmService);
 
   readonly tarefas$ = this.mock.getTarefas();
@@ -37,16 +39,26 @@ export class TarefasComponent {
     { nome: 'Verde', valor: '#00bf6f' },
   ];
 
+  readonly explicar = explicarPrioridade;
+  readonly conta = detalharConta;
+
   filtro: Filtro = 'todas';
   formAberto = false;
   editando: Tarefa | null = null;
   titulo = '';
-  materiaId = 1;
+  materiaId = 0;
   prazo = '';
   descricao = '';
   cor = '#ff3b40';
   erro = '';
   feedback = '';
+
+  constructor() {
+    // Começa com a matéria selecionada (os ids agora vêm da API, não são mais 1, 2, 3…).
+    this.mock.materiaSelecionada$.pipe(takeUntilDestroyed()).subscribe((id) => {
+      if (!this.formAberto) this.materiaId = id;
+    });
+  }
 
   filtradas(tarefas: Tarefa[], filtro: Filtro = this.filtro): Tarefa[] {
     return filtro === 'todas' ? tarefas : tarefas.filter((t) => t.status === filtro);
@@ -82,8 +94,8 @@ export class TarefasComponent {
       this.mock.salvarTarefa({ ...this.editando, titulo, materiaId: this.materiaId, prazo: this.prazo || null, descricao: this.descricao.trim(), cor: this.cor });
       this.feedback = 'Tarefa atualizada.';
     } else {
-      const criada = this.mock.adicionarTarefa(titulo, this.prazo || null, this.materiaId, this.cor);
-      if (criada && this.descricao.trim()) this.mock.salvarTarefa({ ...criada, descricao: this.descricao.trim() });
+      const criada = this.mock.adicionarTarefa(titulo, this.prazo || null, this.materiaId, this.cor, this.descricao);
+      if (!criada) return;
       this.feedback = this.prazo ? 'Tarefa criada. O prazo já aparece na agenda.' : 'Tarefa criada.';
     }
     this.fechar();

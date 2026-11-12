@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { delay, map, tap } from 'rxjs/operators';
-import { User, AuthResponse, LoginCredentials, RegisterData } from './models/user.model';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { BehaviorSubject, Observable, map, of, switchMap, tap } from 'rxjs';
+import { API_BASE } from '../api/api.config';
+import { LoginCredentials, LoginResponse, RegisterData, User, UsuarioApi } from './models/user.model';
 
 const STORAGE_KEY = 'eranitor_auth_user';
 const TOKEN_KEY = 'eranitor_access_token';
@@ -28,59 +29,72 @@ const safeStorage = {
   },
 };
 
+/** Lê a data de expiração (exp, em segundos) do JWT. Não valida a assinatura: isso é papel da API. */
+function tokenExpiraEm(token: string): number | null {
+  try {
+    const payload = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    const exp = JSON.parse(atob(payload)).exp;
+    return typeof exp === 'number' ? exp * 1000 : null;
+  } catch {
+    return null;
+  }
+}
+
+const toUser = (api: UsuarioApi): User => ({
+  id: api.idUsuario,
+  nome: api.nome,
+  login: api.email,
+  serie: api.serie,
+  instituicao: api.instituicao,
+  criadoEm: api.criadoEm,
+});
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private readonly http = inject(HttpClient);
   private currentUserSubject = new BehaviorSubject<User | null>(this.getStoredUser());
   currentUser$: Observable<User | null> = this.currentUserSubject.asObservable();
   isAuthenticated$: Observable<boolean> = this.currentUserSubject.pipe(
     map((user) => !!user)
   );
 
-  login(credentials: LoginCredentials): Observable<AuthResponse> {
-    const mockUser: User = {
-      id: 1,
-      nome: 'João da Silva',
-      login: credentials.login,
-      serie: '3º ano EM',
-      instituicao: 'ETEC Estadual',
-      materias: ['Matemática', 'Português', 'História'],
-    };
-
-    const mockResponse: AuthResponse = {
-      accessToken: 'mock-access-token',
-      refreshToken: 'mock-refresh-token',
-      expiresIn: 3600,
-      user: mockUser,
-    };
-
-    return of(mockResponse).pipe(
-      delay(800),
-      tap((response) => this.setSession(response))
+  /**
+   * O login devolve o token e o usuário (com o id que as outras rotas pedem).
+   * Se a resposta vier sem o usuário, buscamos em GET /usuarios/me.
+   */
+  login(credentials: LoginCredentials): Observable<User> {
+    const email = credentials.login.trim();
+    return this.http.post<LoginResponse>(`${API_BASE}/auth/login`, { email, password: credentials.senha }).pipe(
+      tap(({ token }) => safeStorage.set(TOKEN_KEY, token)),
+      switchMap(({ usuario }) => usuario ? of(usuario) : this.http.get<UsuarioApi>(`${API_BASE}/usuarios/me`)),
+      map(toUser),
+      tap({
+        next: (user) => this.setUser(user),
+        error: () => this.logout(),
+      })
     );
   }
 
-  register(data: RegisterData): Observable<AuthResponse> {
-    const mockUser: User = {
-      id: 2,
+  /** O cadastro não devolve token, então entramos logo em seguida com os mesmos dados. */
+  register(data: RegisterData): Observable<User> {
+    return this.http.post(`${API_BASE}/auth/register`, {
+      email: data.login,
+      password: data.senha,
+      confirmPassword: data.senha,
       nome: data.nome,
-      login: data.login,
-      serie: data.serie,
       instituicao: data.instituicao,
-      materias: [],
-    };
+      serie: data.serie,
+    }).pipe(switchMap(() => this.login({ login: data.login, senha: data.senha })));
+  }
 
-    const mockResponse: AuthResponse = {
-      accessToken: 'mock-access-token',
-      refreshToken: 'mock-refresh-token',
-      expiresIn: 3600,
-      user: mockUser,
-    };
-
-    return of(mockResponse).pipe(
-      delay(800),
-      tap((response) => this.setSession(response))
+  /** Atualiza nome, instituição e série (PUT /usuarios/perfil). */
+  updateProfile(dados: Pick<User, 'nome' | 'instituicao' | 'serie'>): Observable<User> {
+    const email = this.getCurrentUser()?.login ?? '';
+    return this.http.put<UsuarioApi>(`${API_BASE}/usuarios/perfil`, dados, { params: { email } }).pipe(
+      map(toUser),
+      tap((user) => this.setUser(user))
     );
   }
 
@@ -94,19 +108,25 @@ export class AuthService {
     return safeStorage.get(TOKEN_KEY);
   }
 
+  isTokenExpired(): boolean {
+    const token = this.getToken();
+    if (!token) return true;
+    const expira = tokenExpiraEm(token);
+    return expira !== null && expira <= Date.now();
+  }
+
   getCurrentUser(): User | null {
     return this.currentUserSubject.value;
   }
 
-  private setSession(response: AuthResponse): void {
-    safeStorage.set(TOKEN_KEY, response.accessToken);
-    safeStorage.set(STORAGE_KEY, JSON.stringify(response.user));
-    this.currentUserSubject.next(response.user);
+  private setUser(user: User): void {
+    safeStorage.set(STORAGE_KEY, JSON.stringify(user));
+    this.currentUserSubject.next(user);
   }
 
   private getStoredUser(): User | null {
     const raw = safeStorage.get(STORAGE_KEY);
-    if (!raw) return null;
+    if (!raw || this.isTokenExpired()) return null;
     try {
       return JSON.parse(raw) as User;
     } catch {

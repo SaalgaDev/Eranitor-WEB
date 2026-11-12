@@ -1,0 +1,9 @@
+{
+  "/api": {
+    "target": "https://eranitor-backend.onrender.com",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": { "^/api": "" },
+    "logLevel": "warn"
+  }
+}

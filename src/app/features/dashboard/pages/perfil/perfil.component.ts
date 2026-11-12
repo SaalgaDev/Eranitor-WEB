@@ -3,7 +3,7 @@ import { AsyncPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { combineLatest, map } from 'rxjs';
 import { AuthService } from '../../../../core/auth/auth.service';
-import { DashboardMockService } from '../../services/dashboard-mock.service';
+import { DashboardService } from '../../services/dashboard.service';
 import { IconComponent } from '../../components/icon/icon.component';
 
 @Component({
@@ -16,7 +16,7 @@ import { IconComponent } from '../../components/icon/icon.component';
 export class PerfilComponent {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
-  private readonly mock = inject(DashboardMockService);
+  private readonly mock = inject(DashboardService);
 
   readonly user = this.auth.getCurrentUser();
 

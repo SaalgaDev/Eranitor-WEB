@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -6,7 +7,8 @@ import { safeReturnUrl } from '../../../core/auth/return-url';
 import { LogoComponent } from '../../../shared/components/logo/logo.component';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 
-const STRONG_PASSWORD = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+// Mesma regra da API (RegisterDTO): os símbolos aceitos são só estes.
+const STRONG_PASSWORD = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*+=]).{8,}$/;
 
 function passwordsMatch(group: AbstractControl): ValidationErrors | null {
   return group.get('senha')?.value === group.get('confirmaSenha')?.value ? null : { naoCoincidem: true };
@@ -26,12 +28,12 @@ export class RegisterComponent {
 
   readonly form = inject(FormBuilder).nonNullable.group(
     {
-      nome: ['', [Validators.required, Validators.maxLength(100)]],
+      nome: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
       login: ['', [Validators.required, Validators.email, Validators.maxLength(50)]],
       senha: ['', [Validators.required, Validators.pattern(STRONG_PASSWORD)]],
       confirmaSenha: ['', [Validators.required]],
       serie: ['', [Validators.required]],
-      instituicao: ['', [Validators.required, Validators.maxLength(150)]],
+      instituicao: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(150)]],
     },
     { validators: passwordsMatch }
   );
@@ -81,9 +83,12 @@ export class RegisterComponent {
 
     this.auth.register({ nome: nome.trim(), login: login.trim(), senha, serie, instituicao: instituicao.trim() }).subscribe({
       next: () => void this.router.navigateByUrl(this.returnUrl ?? '/dashboard'),
-      error: () => {
+      error: (err: unknown) => {
         this.loading = false;
-        this.error = 'auth.error.registerFailed';
+        const status = err instanceof HttpErrorResponse ? err.status : 0;
+        if (status === 409) this.error = 'auth.error.emailTaken';
+        else if (status === 400) this.error = 'auth.error.registerFailed';
+        else this.error = 'auth.error.server';
       },
     });
   }

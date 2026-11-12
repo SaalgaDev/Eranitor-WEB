@@ -8,8 +8,10 @@ import { AuthService } from '../../core/auth/auth.service';
 import { User } from '../../core/auth/models/user.model';
 import { IconComponent } from './components/icon/icon.component';
 import { DialogComponent } from './components/dialog/dialog.component';
+import { DificuldadeComponent } from './components/dificuldade/dificuldade.component';
+import { detalharConta, explicarPrioridade } from './services/prioridade';
 import { ConfirmService } from './services/confirm.service';
-import { BarraPorcentagem, DashboardMockService, DesempenhoSetor, Tarefa } from './services/dashboard-mock.service';
+import { BarraPorcentagem, DashboardService, DesempenhoSetor, Tarefa } from './services/dashboard.service';
 
 const capitalizar = (texto: string): string => texto.charAt(0).toUpperCase() + texto.slice(1);
 
@@ -18,20 +20,28 @@ type ChaveEstudo = 'atividade' | 'video' | 'apostila';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [AsyncPipe, DatePipe, FormsModule, RouterLink, IconComponent, DialogComponent],
+  imports: [AsyncPipe, DatePipe, FormsModule, RouterLink, IconComponent, DialogComponent, DificuldadeComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent {
   private readonly auth = inject(AuthService);
   private readonly confirm = inject(ConfirmService);
-  readonly mock = inject(DashboardMockService);
+  readonly mock = inject(DashboardService);
 
   user: User | null = this.auth.getCurrentUser();
 
   readonly tarefas$ = this.mock.tarefas$;
+  readonly sugestao$ = this.mock.sugestaoDoDia$;
+  readonly explicar = explicarPrioridade;
+  readonly conta = detalharConta;
   readonly materiasAtivas$ = this.mock.materias$.pipe(map((materias) => materias.filter((m) => m.ativa)));
-  readonly barras$ = this.mock.barrasPorcentagem$;
+  readonly barras$ = this.mock.barrasPorcentagem$.pipe(map((barras) => {
+    const maior = Math.max(0, ...barras.map((b) => b.atividade + b.video + b.apostila));
+    const passo = [1, 2, 5, 10, 20, 50].find((p) => p * 5 >= maior) ?? 100;
+    this.eixo = [5, 4, 3, 2, 1, 0].map((n) => n * passo);
+    return barras;
+  }));
   readonly desempenho$ = this.mock.desempenho$;
   readonly tempoResumo$ = this.mock.resumoTempo$;
 
@@ -40,22 +50,24 @@ export class DashboardComponent {
     { chave: 'video', rotulo: 'Vídeo', cor: 'var(--chart-purple)' },
     { chave: 'apostila', rotulo: 'Apostila', cor: 'var(--chart-orange)' },
   ];
-  readonly eixo = [50, 40, 30, 20, 10, 0];
+  /** Eixo do gráfico de barras, ajustado ao maior valor (em horas). */
+  eixo = [5, 4, 3, 2, 1, 0];
 
   readonly mesAtual = capitalizar(new Date().toLocaleDateString('pt-BR', { month: 'long' }));
 
   adicionarAberto = false;
   novoTitulo = '';
   novoPrazo = '';
-  novaMateriaId = 1;
+  novaMateriaId = 0;
 
   adicionarMateriaAberto = false;
   novaMateria = '';
+  novaDificuldade = 3;
   erroMateria = '';
 
   editando: Tarefa | null = null;
   edicaoTitulo = '';
-  edicaoMateriaId = 1;
+  edicaoMateriaId = 0;
   edicaoPrazo = '';
   edicaoDescricao = '';
 
@@ -85,8 +97,9 @@ export class DashboardComponent {
   }
 
   adicionarMateria(): void {
-    if (this.mock.adicionarMateria(this.novaMateria)) {
+    if (this.mock.adicionarMateria(this.novaMateria, this.novaDificuldade)) {
       this.novaMateria = '';
+      this.novaDificuldade = 3;
       this.erroMateria = '';
       this.adicionarMateriaAberto = false;
     } else {

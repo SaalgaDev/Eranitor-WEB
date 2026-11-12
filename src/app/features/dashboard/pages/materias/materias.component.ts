@@ -2,19 +2,21 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DashboardMockService, Materia, Topico } from '../../services/dashboard-mock.service';
+import { DashboardService, Materia, Topico } from '../../services/dashboard.service';
 import { ConfirmService } from '../../services/confirm.service';
 import { IconComponent } from '../../components/icon/icon.component';
+import { DificuldadeComponent } from '../../components/dificuldade/dificuldade.component';
+import { rotuloDificuldade } from '../../services/prioridade';
 
 @Component({
   selector: 'app-materias',
   standalone: true,
-  imports: [FormsModule, IconComponent],
+  imports: [FormsModule, IconComponent, DificuldadeComponent],
   templateUrl: './materias.component.html',
   styleUrl: './materias.component.scss',
 })
 export class MateriasComponent {
-  readonly mock = inject(DashboardMockService);
+  readonly mock = inject(DashboardService);
   private readonly confirm = inject(ConfirmService);
 
   materias: Materia[] = [];
@@ -22,6 +24,7 @@ export class MateriasComponent {
   topicoId: number | null = null;
 
   novaMateria = '';
+  novaDificuldade = 3;
   novoTopico = '';
   nomeMateria = '';
   nomeTopico = '';
@@ -43,6 +46,8 @@ export class MateriasComponent {
   get materia(): Materia | undefined { return this.materias.find((m) => m.id === this.materiaId && m.ativa); }
   get topico(): Topico | undefined { return this.materia?.topicos.find((t) => t.id === this.topicoId); }
 
+  readonly rotuloDificuldade = rotuloDificuldade;
+
   concluidos(materia: Materia): number {
     return materia.topicos.filter((t) => t.concluido).length;
   }
@@ -60,13 +65,14 @@ export class MateriasComponent {
   }
 
   adicionarMateria(): void {
-    if (!this.mock.adicionarMateria(this.novaMateria)) {
+    if (!this.mock.adicionarMateria(this.novaMateria, this.novaDificuldade)) {
       this.feedback = 'Informe um nome que ainda não esteja na lista.';
       return;
     }
     this.materiaId = this.materias.at(-1)?.id ?? this.materiaId;
     this.topicoId = null;
     this.novaMateria = '';
+    this.novaDificuldade = 3;
     this.feedback = 'Matéria adicionada.';
     this.sincronizar();
   }
@@ -76,6 +82,13 @@ export class MateriasComponent {
     this.feedback = this.mock.renomearMateria(this.materia.id, this.nomeMateria)
       ? 'Nome da matéria atualizado.'
       : 'Use um nome válido e diferente das outras matérias.';
+  }
+
+  definirDificuldade(valor: number): void {
+    if (!this.materia) return;
+    this.feedback = this.mock.definirDificuldade(this.materia.id, valor)
+      ? `Dificuldade de ${this.materia.nome}: ${rotuloDificuldade(valor).toLocaleLowerCase()}. A prioridade das tarefas já foi recalculada.`
+      : 'Escolha uma dificuldade de 1 a 5.';
   }
 
   async arquivarMateria(): Promise<void> {

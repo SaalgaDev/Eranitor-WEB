@@ -139,3 +139,5 @@
 @media (max-width: 480px) {
   .form-cols { grid-template-columns: 1fr; }
 }
+
+.task__why { color: var(--d-accent); }

@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
-import { DashboardMockService, RegistroTempo, TipoEstudo } from '../../services/dashboard-mock.service';
+import { DashboardService, RegistroTempo, TipoEstudo } from '../../services/dashboard.service';
 
 const CAMPO: Record<TipoEstudo, 'minutosAtividade' | 'minutosVideo' | 'minutosApostila'> = {
   atividade: 'minutosAtividade',
@@ -18,7 +19,7 @@ const CAMPO: Record<TipoEstudo, 'minutosAtividade' | 'minutosVideo' | 'minutosAp
   styleUrl: './tempo-estudado.component.scss',
 })
 export class TempoEstudadoComponent {
-  readonly mock = inject(DashboardMockService);
+  readonly mock = inject(DashboardService);
   readonly materiasAtivas$ = this.mock.getMaterias().pipe(map((materias) => materias.filter((m) => m.ativa)));
   readonly registros$ = this.mock.tempos$;
   readonly resumo$ = this.mock.resumoTempo$;
@@ -37,11 +38,18 @@ export class TempoEstudadoComponent {
     return texto.charAt(0).toUpperCase() + texto.slice(1);
   })();
 
-  materiaId = 1;
+  materiaId = 0;
   tipo: TipoEstudo = 'atividade';
   minutos: number | null = null;
   erro = '';
   feedback = '';
+
+  constructor() {
+    // Começa com a matéria selecionada (os ids agora vêm da API, não são mais 1, 2, 3…).
+    this.mock.materiaSelecionada$.pipe(takeUntilDestroyed()).subscribe((id) => {
+      this.materiaId = id;
+    });
+  }
 
   registrar(): void {
     this.feedback = '';

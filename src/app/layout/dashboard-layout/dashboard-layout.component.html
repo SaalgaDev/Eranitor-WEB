@@ -2,7 +2,16 @@
 <div class="dash-main">
   <router-outlet />
 </div>
-<p class="dash-footnote">Versão de demonstração: seus dados ficam salvos só neste navegador até o app ser ligado ao servidor.</p>
+<p class="dash-footnote">Seus dados ficam salvos na sua conta Eranitor e aparecem também no app.</p>
+
+<div class="dash-toast-area" role="alert" aria-live="assertive">
+  @if (aviso()) {
+    <div class="dash-toast">
+      <span>{{ aviso() }}</span>
+      <button type="button" class="dash-toast__close" (click)="fecharAviso()" aria-label="Fechar aviso">×</button>
+    </div>
+  }
+</div>
 
 @if (confirm.current(); as request) {
   <app-dialog [title]="request.title" (close)="confirm.answer(false)">

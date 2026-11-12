@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -16,7 +17,8 @@ export class LoginComponent {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
 
-  readonly returnUrl = safeReturnUrl(inject(ActivatedRoute).snapshot.queryParamMap.get('returnUrl'));
+  private readonly query = inject(ActivatedRoute).snapshot.queryParamMap;
+  readonly returnUrl = safeReturnUrl(this.query.get('returnUrl'));
 
   readonly form = inject(FormBuilder).nonNullable.group({
     login: ['', [Validators.required]],
@@ -25,7 +27,7 @@ export class LoginComponent {
 
   loading = false;
   showPassword = false;
-  error = '';
+  error = this.query.get('expirada') ? 'auth.error.sessionExpired' : '';
 
   showError(name: 'login' | 'senha'): boolean {
     const control = this.form.controls[name];
@@ -43,9 +45,10 @@ export class LoginComponent {
 
     this.auth.login(this.form.getRawValue()).subscribe({
       next: () => void this.router.navigateByUrl(this.returnUrl ?? '/dashboard'),
-      error: () => {
+      error: (err: unknown) => {
         this.loading = false;
-        this.error = 'auth.error.loginFailed';
+        const status = err instanceof HttpErrorResponse ? err.status : 0;
+        this.error = status === 401 || status === 400 ? 'auth.error.loginFailed' : 'auth.error.server';
       },
     });
   }

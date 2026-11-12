@@ -8,6 +8,9 @@
 }
 
 .inline-add { margin-bottom: 14px; }
+.new-subject { display: grid; gap: 4px; margin-bottom: 14px; }
+.new-subject .inline-add { margin-bottom: 0; }
+.new-subject app-dificuldade { margin-bottom: 4px; }
 .panel__foot .inline-add { margin-bottom: 0; }
 
 .list { max-height: 330px; }

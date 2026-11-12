@@ -2,7 +2,7 @@
   <header class="dash-head">
     <div>
       <h1 class="dash-head__title">Tarefas</h1>
-      <p class="dash-head__lede">Tarefas com prazo também aparecem na agenda.</p>
+      <p class="dash-head__lede">As pendentes aparecem da mais para a menos prioritária. Tarefas com prazo também vão para a agenda.</p>
     </div>
     <button type="button" class="btn btn--dark" (click)="novaTarefa()">
       <app-icon name="plus" /> Nova tarefa
@@ -37,6 +37,9 @@
             <div class="row__main">
               <span class="row__title">{{ tarefa.titulo }}</span>
               <span class="row__meta">{{ tarefa.descricao || 'Sem descrição' }}</span>
+              @if (tarefa.parcelas; as p) {
+                <span class="row__meta task__why">Prioridade {{ p.total }} pts · {{ explicar(p) }}</span>
+              }
             </div>
             <span class="task__meta">
               <span class="task__subject">{{ mock.nomeMateria(tarefa.materiaId) }}</span>

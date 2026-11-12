@@ -51,6 +51,26 @@
           </form>
         }
 
+        @if (sugestao$ | async; as sugestao) {
+          @if (sugestao.length) {
+            <section class="today" aria-labelledby="home-today-title">
+              <h3 class="today__title" id="home-today-title">O que estudar hoje</h3>
+              <ol class="today__list">
+                @for (tarefa of sugestao; track tarefa.id; let i = $index) {
+                  <li class="today__item">
+                    <span class="today__rank" aria-hidden="true">{{ i + 1 }}</span>
+                    <span class="today__main">
+                      <span class="today__name">{{ tarefa.titulo }} <span class="today__subject">· {{ mock.nomeMateria(tarefa.materiaId) }}</span></span>
+                      <span class="today__why">{{ explicar(tarefa.parcelas!) }}</span>
+                    </span>
+                    <span class="chip" [class.chip--late]="tarefa.status === 'atrasada'" [title]="conta(tarefa.parcelas!)" [attr.aria-label]="'Prioridade ' + tarefa.parcelas!.total + ': ' + conta(tarefa.parcelas!)">{{ tarefa.parcelas!.total }} pts</span>
+                  </li>
+                }
+              </ol>
+            </section>
+          }
+        }
+
         <ul class="row-list panel__body">
           @for (tarefa of tarefas; track tarefa.id) {
             <li class="row" [class.row--done]="tarefa.status === 'concluida'">
@@ -151,6 +171,7 @@
           <input id="home-subject-name" name="materia" class="input" type="text" maxlength="100" [(ngModel)]="novaMateria" placeholder="Nome da matéria" required />
           <button type="submit" class="btn btn--primary">Salvar</button>
         </form>
+        <app-dificuldade class="quick-difficulty" [(valor)]="novaDificuldade" />
         @if (erroMateria) { <p class="form-error" role="alert">{{ erroMateria }}</p> }
       }
 
