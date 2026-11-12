@@ -508,7 +508,8 @@ export class DashboardService {
           materiaId: t.materiaId!,
           prazo: t.dataVencimento,
           status: t.concluida ? 'concluida' as const : 'pendente' as const,
-          descricao: t.descricao ?? '',
+          // Sem descrição, o site envia o próprio título (a API exige o campo); aqui desfazemos isso.
+          descricao: t.descricao && t.descricao !== t.titulo ? t.descricao : '',
           cor: t.cor ?? COR_PADRAO,
         })),
         eventos: agenda.map((a) => ({
