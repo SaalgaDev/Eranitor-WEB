@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpBackend, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, Observable, map, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, finalize, map, of, shareReplay, switchMap, tap } from 'rxjs';
 import { API_BASE } from '../api/api.config';
 import { LoginCredentials, LoginResponse, RegisterData, User, UsuarioApi } from './models/user.model';
 
@@ -54,6 +54,9 @@ const toUser = (api: UsuarioApi): User => ({
 })
 export class AuthService {
   private readonly http = inject(HttpClient);
+  /** Cliente sem interceptores, para conferir a sessão sem cair no próprio interceptor. */
+  private readonly httpDireto = new HttpClient(inject(HttpBackend));
+  private verificacao$: Observable<boolean> | null = null;
   private currentUserSubject = new BehaviorSubject<User | null>(this.getStoredUser());
   currentUser$: Observable<User | null> = this.currentUserSubject.asObservable();
   isAuthenticated$: Observable<boolean> = this.currentUserSubject.pipe(
@@ -96,6 +99,22 @@ export class AuthService {
       map(toUser),
       tap((user) => this.setUser(user))
     );
+  }
+
+  /**
+   * Confere na API se o token atual ainda vale (GET /usuarios/me).
+   * Só um 401 dessa rota conta como sessão encerrada; erro de rede não desloga ninguém.
+   */
+  sessaoValida(): Observable<boolean> {
+    const token = this.getToken();
+    if (!token || this.isTokenExpired()) return of(false);
+    this.verificacao$ ??= this.httpDireto.get(`${API_BASE}/usuarios/me`, { headers: { Authorization: `Bearer ${token}` } }).pipe(
+      map(() => true),
+      catchError((erro: unknown) => of(!(erro instanceof HttpErrorResponse && erro.status === 401))),
+      finalize(() => (this.verificacao$ = null)),
+      shareReplay(1)
+    );
+    return this.verificacao$;
   }
 
   logout(): void {

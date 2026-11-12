@@ -5,7 +5,7 @@ import { catchError, throwError } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { API_BASE } from './api.config';
 
-/** Coloca o token JWT nas chamadas à API e encerra a sessão quando ele expira. */
+/** Coloca o token JWT nas chamadas à API e encerra a sessão quando ela realmente acabou. */
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if (!req.url.startsWith(API_BASE)) return next(req);
 
@@ -17,13 +17,15 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(request).pipe(
     catchError((error: unknown) => {
-      // A API responde 403 quando o token está ausente, inválido ou expirado. Um 403 também pode
-      // vir de um erro interno da API, por isso só encerramos a sessão quando o token venceu.
-      const sessaoVencida = error instanceof HttpErrorResponse
-        && (error.status === 401 || (error.status === 403 && auth.isTokenExpired()));
-      if (!isAuthCall && sessaoVencida && auth.getCurrentUser()) {
-        auth.logout();
-        void router.navigate(['/auth/login'], { queryParams: { returnUrl: router.url, expirada: 1 } });
+      // 401 = sem sessão válida. Mas um erro interno da API também pode chegar como 401
+      // (o Spring encaminha para /error, que exige login). Por isso, antes de deslogar,
+      // conferimos a sessão em /usuarios/me. 403 agora significa "recurso de outro usuário".
+      if (!isAuthCall && error instanceof HttpErrorResponse && error.status === 401 && auth.getCurrentUser()) {
+        auth.sessaoValida().subscribe((valida) => {
+          if (valida) return;
+          auth.logout();
+          void router.navigate(['/auth/login'], { queryParams: { returnUrl: router.url, expirada: 1 } });
+        });
       }
       return throwError(() => error);
     })
