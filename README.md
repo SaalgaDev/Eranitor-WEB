@@ -47,9 +47,9 @@ Matérias, tópicos, tarefas, agenda, sessões de estudo, controle de tempo, met
 
 | Componente | Tecnologia | Estado |
 | --- | --- | --- |
-| Site institucional | Angular 18, SCSS | Projeto gerado com conteúdo placeholder |
-| App (frontend) | Angular 17+, TypeScript, SCSS | Telas Splash e Login prontas |
-| Backend | Java, Spring Boot, JWT, PostgreSQL | Especificado, ainda não conectado ao frontend |
+| Site + área do estudante | Angular 18, SCSS | Pronto e integrado à API |
+| App mobile | (equipe do mobile) | Em desenvolvimento, usará a mesma API |
+| Backend | Java, Spring Boot, JWT, PostgreSQL (Supabase), Render | No ar e conectado ao site |
 
 ---
 
@@ -65,10 +65,13 @@ O site **não substitui o app**. Ele apresenta o produto, gera confiança e dire
 
 ### Premissas técnicas
 
-- Frontend-only: sem backend e sem login.
+- Login e cadastro reais (JWT); a área do estudante lê e grava matérias, tópicos, tarefas, agenda e tempo de estudo na API.
+- O site chama sempre `/api/...`: em desenvolvimento o `proxy.conf.json` repassa para `https://eranitor-backend.onrender.com`; na Vercel, o `vercel.json` faz o mesmo. Assim não há bloqueio de CORS.
+- Prioridade das tarefas calculada com a mesma fórmula do backend (`services/prioridade.ts`), com o bloco "O que estudar hoje".
+- Cronômetro de estudo (livre ou pomodoro) com tela cheia; o tempo é registrado após confirmação.
+- Rodar localmente: `npm install` e `npm start` (precisa de internet, pois usa a API).
 - Angular 18, escolhido para casar com o código do app.
 - SCSS com design tokens centralizados.
-- Entrega empacotada em zip.
 
 ### Páginas
 
